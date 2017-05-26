@@ -25,7 +25,7 @@ Fetching alerts forces us to authenticate. Pass your credentials using `configur
 
 ```js
 alerts.configure({
-	mail: 'your_mail@gmail.com',
+    mail: 'your_mail@gmail.com',
     password: '**********'
 });
 ```
@@ -44,13 +44,13 @@ alerts.configure({
 });
 
 alerts.sync((err) => {
-	if(err) return console.log(err);
-	const alertList = api.getAlerts();
+    if(err) return console.log(err);
+    const alertList = api.getAlerts();
     alertList.forEach(alert => printAlertInfo);
 });
 
 function printAlertInfo(alert){
-	console.log('name:', alert.name);
+    console.log('name:', alert.name);
     //'How Many' property information:
     if (alert.howMany === HOW_MANY.BEST) {
     	console.log('How many: Only the best results');
