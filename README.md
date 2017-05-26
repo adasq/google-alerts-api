@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/adasq/dropbox-v2-api.svg?branch=master)](https://travis-ci.org/adasq/dropbox-v2-api)
+[![Build Status](https://travis-ci.org/adasq/google-alerts-api.svg?branch=master)](https://travis-ci.org/adasq/google-alerts-api)
 
 # google-alerts-api
 
