@@ -11,8 +11,8 @@ nconf.argv()
     .env()
     .file({ file: './config.json' });
 
-const MAIL = nconf.get('mail');
-const PASSWORD = nconf.get('password');
+const MAIL = nconf.get('mail') || process.env.mail;
+const PASSWORD = nconf.get('password') || process.env.password;
 const NAME = generateRandomName();
 const MODIFIED_NAME = NAME + ' modified';
 
