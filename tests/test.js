@@ -16,6 +16,8 @@ const PASSWORD = nconf.get('password') || process.env.password;
 const NAME = generateRandomName();
 const MODIFIED_NAME = NAME + ' modified';
 
+console.log(MAIL.length > 0, PASSWORD.length > 0);
+
 describe('google', function() {
     this.timeout(TIMEOUT_MS);
     describe('alerts', () => {
