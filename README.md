@@ -1,13 +1,8 @@
-[![Build Status](https://travis-ci.org/adasq/google-alerts-api.svg?branch=master)](https://travis-ci.org/adasq/google-alerts-api)
-
 # google-alerts-api
 
 Google Alerts API wrapper for nodejs. See [tests] for all features coverage.
 
-
-
 ## Features
-
 
 - Creating alerts (no support for few parameters)
 - Fetching alerts
