@@ -39,7 +39,7 @@ const alerts = require('google-alerts-api');
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY } = alerts;
 
 alerts.configure({
-	mail: 'your_mail@gmail.com',
+    mail: 'your_mail@gmail.com',
     password: '**********'
 });
 
@@ -84,15 +84,15 @@ alerts.sync((err) => {
     alerts.modify(alertToModify.id, {
     	name: '"(Donald OR Melania) Trump"'
     }, () => {
-    	alerts.sync(() => {
-        	const syncedAlertsList = alerts.getAlerts();
-        	//search in syncedAlertsList to check updated alert
+        alerts.sync(() => {
+            const syncedAlertsList = alerts.getAlerts();
+            //search in syncedAlertsList to check updated alert
         });
     });
 });
 
 function printAlertInfo(alert){
-	console.log('name:', alert.name);
+    console.log('name:', alert.name);
     //'How Many' property information:
     if (alert.howMany === HOW_MANY.BEST) {
     	console.log('How many: Only the best results');
@@ -108,7 +108,7 @@ function printAlertInfo(alert){
 alerts.sync(() => {
 	const alertToCreate = {
     	howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
-		sources: [],
+	sources: [],
         lang: 'en',
         name: 'NodeJS AND "Chrome V8"',
         region: 'PL',
@@ -130,7 +130,7 @@ alerts.sync((err) => {
 	const alertToRemove = api.getAlerts()[0];
     alerts.remove(alertToRemove.id, (err) => {
     	alerts.sync((err) => {
-        	const syncedAlertsList = alerts.getAlerts(); //alertToRemove does not exists here.
+            const syncedAlertsList = alerts.getAlerts(); //alertToRemove does not exists here.
         });
     });   
 });
