@@ -60,9 +60,9 @@ function printAlertInfo(alert){
 }
 ```
 #### Example alert object:
-```
+```js
 {
-	name: '"Donald Trump * ISIS"',
+    name: '"Donald Trump * ISIS"',
     id: '4f94515ec736ef62:ade5b03803caa237:com:en:PL:R',
     howOften: 2, //use HOW_OFTEN enum to find out proper meaning
     sources: [], // sources are not supported yet
