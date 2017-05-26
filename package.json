@@ -1,0 +1,21 @@
+{
+  "name": "google-alerts-api",
+  "version": "0.0.1",
+  "description": "Google Alerts API",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/test.js"
+  },
+  "author": "adasq",
+  "license": "ISC",
+  "dependencies": {
+    "nested-property": "0.0.7",
+    "request": "2.81.0"
+  },
+  "devDependencies": {
+    "cheerio": "0.22.0",
+    "expect.js": "0.3.1",
+    "mocha": "3.4.1",
+    "nconf": "0.8.4"
+  }
+}
