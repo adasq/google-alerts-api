@@ -6,6 +6,10 @@
   "scripts": {
     "test": "mocha tests/test.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adasq/google-alerts-api.git"
+  },
   "author": "adasq",
   "license": "ISC",
   "dependencies": {
