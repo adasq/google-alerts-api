@@ -1,6 +1,7 @@
 const api = require('../index.js');
 const expect = require('expect.js');
 const nconf = require('nconf');
+const fs = require('fs');
 const { parseAlertToData, printAlertData} = require('../src/alerts.js');
 
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY } = api;
@@ -41,8 +42,19 @@ describe('google', function() {
                 done();
             });
         });
-
-        it('does not throw for valid configuration', (done) => {
+        xit('does not throw for valid mail/pswd configuration', (done) => {
+            api.configure({
+                mail: MAIL,
+                password: PASSWORD
+            });
+            api.sync((err) => {
+                expect(err).to.be(null);
+                const cookies = api.getCookies();
+                fs.writeFileSync('./cookiez', cookies);
+                done();
+            });
+        });
+        it('does not throw for valid cookies configuration', (done) => {
             api.configure({
                 cookies: COOKIES
             });

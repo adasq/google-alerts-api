@@ -13,24 +13,26 @@ const ERROR = {
     CONFIGURATION: 'no mail/pass specified'
 };
 
-function getCookies(){
-    //require('fs').writeFileSync('./cookiez', JSON.stringify(x));
-    return JSON.stringify(reqHandler.getCookies());
+function getCookies() {
+    const str = JSON.stringify(reqHandler.getCookies());
+    return new Buffer(str).toString('base64');
 }
 
 function setCookies(cookies){
-            // let cookiezStr = require('fs').readFileSync('./cookiez');
-
-    //require('fs').writeFileSync('./cookiez', JSON.stringify(x));
     reqHandler.setCookies(JSON.parse(cookies));
 }
 
 function configure({mail, password, cookies}) {
     config.mail = mail;
     config.password = password;
-    config.cookies = (cookies && JSON.parse(cookies)) || null;
+    config.cookies = (cookies && parseCookies(cookies)) || null;
     isAuthenticated = false;
     reqHandler.removeCookies();
+}
+
+function parseCookies(cookies) {
+    const str = new Buffer(cookies, 'base64').toString('ascii');
+    return JSON.parse(str);
 }
 
 function sync(cb) {
