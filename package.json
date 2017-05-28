@@ -14,10 +14,10 @@
   "license": "ISC",
   "dependencies": {
     "nested-property": "0.0.7",
-    "request": "2.81.0"
+    "request": "2.81.0",
+    "cheerio": "0.22.0"
   },
-  "devDependencies": {
-    "cheerio": "0.22.0",
+  "devDependencies": {    
     "expect.js": "0.3.1",
     "mocha": "3.4.1",
     "nconf": "0.8.4"
