@@ -31,14 +31,20 @@ describe('google', function() {
                 done();
             });
         });
-
-        xit('throws for invalid configuration', (done) => {
+        it('throws for invalid configuration', (done) => {
             api.configure({
                 mail: MAIL,
                 password: `incorrect${PASSWORD}` 
             });
             api.sync((err) => {
                 expect(err).to.be('authentication issue');
+                done();
+            });
+        });
+        xit('generates cookie', (done) => {
+            api.generateCookies(MAIL, PASSWORD, (err, cookies) => {
+                expect(err).to.be(null);
+                console.log(cookies);
                 done();
             });
         });
@@ -49,8 +55,6 @@ describe('google', function() {
             });
             api.sync((err) => {
                 expect(err).to.be(null);
-                const cookies = api.getCookies();
-                fs.writeFileSync('./cookiez', cookies);
                 done();
             });
         });

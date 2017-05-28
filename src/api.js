@@ -18,6 +18,15 @@ function getCookies() {
     return new Buffer(str).toString('base64');
 }
 
+function generateCookies(mail, password, cb) {
+    configure({mail, password});
+    sync((err) => {
+        if(err) return cb(err);
+        const cookies = getCookies();
+        cb(null, cookies);
+    });    
+}
+
 function setCookies(cookies){
     reqHandler.setCookies(JSON.parse(cookies));
 }
@@ -118,9 +127,9 @@ function create(createData, cb) {
 module.exports = {
     HOW_OFTEN, DELIVER_TO, HOW_MANY, ERROR,
     configure,
+    generateCookies,
     sync,
     getAlerts,
-    getAlerts2,
     create,
     remove,
     modify,
