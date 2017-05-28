@@ -30,7 +30,8 @@ alerts.configure({
     password: '**********'
 });
 ```
-- using cookie ([how to get cookies])
+
+- using cookie [how to get cookies?](#generate-cookies)
 
 ```js
 alerts.configure({
