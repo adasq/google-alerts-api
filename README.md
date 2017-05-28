@@ -23,10 +23,18 @@ const alerts = require('google-alerts-api');
 
 Fetching alerts forces us to authenticate. Pass your credentials using `configure` method:
 
+- using mail/password
 ```js
 alerts.configure({
     mail: 'your_mail@gmail.com',
     password: '**********'
+});
+```
+- using cookie ([how to get cookies])
+
+```js
+alerts.configure({
+    cookies: 'W3sia2V5IjoiR0FQUyIsInZhbHVlIjoiMTpCRXRtZEpjc...saGRasC==',
 });
 ```
 
@@ -136,5 +144,31 @@ alerts.sync((err) => {
 });
 ```
 
-[tests]: <https://github.com/adasq/google-alerts-api/blob/master/tests/test.js>
+#### Generate cookies:
 
+You can authenticate once, and then use cookies.
+
+```js
+const fs = require('fs');
+
+alerts.generateCookies(MAIL, PASSWORD, (err, cookies) => {
+    if(err) return console.log(err);
+    fs.writeFileSync('cookies.data', cookies);
+});
+```
+and then:
+```js
+const fs = require('fs');
+
+alerts.configure({
+    cookies: fs.readFileSync('cookies.data')
+});
+
+alerts.sync((err) => {
+    if(err) return console.log(err);
+    const alertList = api.getAlerts();
+});
+```
+
+[tests]: <https://github.com/adasq/google-alerts-api/blob/master/tests/test.js>
+[how to get cookies]: <https://github.com/adasq/google-alerts-api#generate-cookies>
