@@ -13,18 +13,33 @@ const ERROR = {
     CONFIGURATION: 'no mail/pass specified'
 };
 
-function configure({mail, password}) {
+function getCookies(){
+    //require('fs').writeFileSync('./cookiez', JSON.stringify(x));
+    return JSON.stringify(reqHandler.getCookies());
+}
+
+function setCookies(cookies){
+            // let cookiezStr = require('fs').readFileSync('./cookiez');
+
+    //require('fs').writeFileSync('./cookiez', JSON.stringify(x));
+    reqHandler.setCookies(JSON.parse(cookies));
+}
+
+function configure({mail, password, cookies}) {
     config.mail = mail;
     config.password = password;
+    config.cookies = (cookies && JSON.parse(cookies)) || null;
     isAuthenticated = false;
     reqHandler.removeCookies();
 }
 
 function sync(cb) {
-    if(!config.mail || !config.password) {
+    if( (config.mail && config.password) ||  config.cookies) {
+
+    } else {
         return cb(ERROR.CONFIGURATION);
     }
-    
+
     if (!isAuthenticated) {
         reqHandler.login(config, (err) => {
            if(err) return cb(err);
@@ -106,5 +121,6 @@ module.exports = {
     getAlerts2,
     create,
     remove,
-    modify
+    modify,
+    getCookies
 };

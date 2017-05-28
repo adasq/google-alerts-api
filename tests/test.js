@@ -11,12 +11,12 @@ nconf.argv()
     .env()
     .file({ file: './config.json' });
 
-const MAIL = nconf.get('mail') || process.env.mail;
-const PASSWORD = nconf.get('password') || process.env.password;
+const MAIL = nconf.get('mail');
+const PASSWORD = nconf.get('password');
+const COOKIES = nconf.get('cookies');
+
 const NAME = generateRandomName();
 const MODIFIED_NAME = NAME + ' modified';
-
-console.log(MAIL.length > 0, PASSWORD.length > 0);
 
 describe('google', function() {
     this.timeout(TIMEOUT_MS);
@@ -44,8 +44,7 @@ describe('google', function() {
 
         it('does not throw for valid configuration', (done) => {
             api.configure({
-                mail: MAIL,
-                password: PASSWORD
+                cookies: COOKIES
             });
             api.sync((err) => {
                 expect(err).to.be(null);
