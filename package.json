@@ -1,6 +1,6 @@
 {
   "name": "google-alerts-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Google Alerts API",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "request": "2.81.0",
     "cheerio": "0.22.0"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "expect.js": "0.3.1",
     "mocha": "3.4.1",
     "nconf": "0.8.4"
