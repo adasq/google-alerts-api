@@ -2,6 +2,7 @@ const cheerio = require('cheerio');
 const np = require('nested-property');
 
 const DOMAIN = 'https://google.com/';
+const RSS_ID_REGEX = /\/alerts\/feeds\/(\d+)\//;
 
 const HOW_OFTEN = {
     AS_IT_HAPPENS: 1,
@@ -62,7 +63,27 @@ function getStateByBody(body) {
             return null;
         }
     }
+
+function prepareRssFeedUrl(userId, rssId) {
+    return `${DOMAIN}alerts/feeds/${userId}/${rssId}`;
+}
+
+function getRssFeedByCreateResponse(body) {
     
+    const parsedBody = JSON.parse(body);
+    let alert = parsedBody[4][0][3]; 
+    const rssId = alert[6][0][11];
+    
+    const match = body.match(RSS_ID_REGEX);
+    
+    if(match){
+        const userId = match[1];
+        return prepareRssFeedUrl(userId, rssId);
+    } else {
+        return '';
+    }
+}
+
     function parseAlertToData(alert) {
         function getSources(alert) {
             return [np.get(alert, "2.7"), np.get(alert, "2.8"), np.get(alert, "2.9")];
@@ -72,7 +93,7 @@ function getStateByBody(body) {
             const userId = alert[alert.length - 1];
 
             if (typeof userId !== 'string') { return ''; }
-            return `${DOMAIN}alerts/feeds/${userId}/${rssId}`;
+            return prepareRssFeedUrl(userId, rssId);
         }
         
         return {
@@ -189,5 +210,5 @@ module.exports = {
     findAlertById, modifyData,
     getCreateIdByState, getAlertsByState, getRequestXByState,
     getStateByBody, create, parseAlertToData, printAlertData,
-    isLoggedInByState
+    isLoggedInByState, getRssFeedByCreateResponse
 };

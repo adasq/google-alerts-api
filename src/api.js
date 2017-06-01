@@ -115,9 +115,10 @@ function create(createData, cb) {
         try {
             const parsedBody = JSON.parse(body);
             let alert = parsedBody[4][0][3]; 
-            const id = parsedBody[4][0][1];
-            // console.log(alert[6][0][11])
-            cb(null, alerts.parseAlertToData([null, id, alert]));
+            const id = alert[6][0][11];
+            const parsedAlert = alerts.parseAlertToData([null, id, alert]);
+            parsedAlert.rss = alerts.getRssFeedByCreateResponse(body);
+            cb(null, parsedAlert);
         }catch(e) {
             cb(e);
         }
