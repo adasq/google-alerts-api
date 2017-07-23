@@ -92,8 +92,8 @@ function printAlertInfo(alert){
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY } = alerts;
 
 alerts.sync((err) => {
-	if(err) return console.log(err);
-	const alertToModify = alerts.getAlerts()[0];
+    if(err) return console.log(err);
+    const alertToModify = alerts.getAlerts()[0];
     alerts.modify(alertToModify.id, {
     	name: '"(Donald OR Melania) Trump"'
     }, () => {
@@ -119,7 +119,7 @@ function printAlertInfo(alert){
 
 ```js
 alerts.sync(() => {
-	const alertToCreate = {
+    const alertToCreate = {
     	howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
 	sources: [],
         lang: 'en',
@@ -131,7 +131,7 @@ alerts.sync(() => {
     };
 
     alerts.create(alertToCreate, (err, alert) => {
-    	console.log(alert);
+        console.log(alert);
     });
 });
 ```
@@ -140,7 +140,7 @@ alerts.sync(() => {
 
 ```js
 alerts.sync((err) => {
-	const alertToRemove = alerts.getAlerts()[0];
+    const alertToRemove = alerts.getAlerts()[0];
     alerts.remove(alertToRemove.id, (err) => {
     	alerts.sync((err) => {
             const syncedAlertsList = alerts.getAlerts(); //alertToRemove does not exists here.
