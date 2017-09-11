@@ -162,7 +162,10 @@ function toString(category, value) {
     }
 
     function getAlertsByState(state){
-        return state[1][1]; 
+        if (state[1] === null) {
+            return [];
+        }
+        return state[1][1];
     }
 
 function printAlertData(data) {
