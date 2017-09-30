@@ -35,7 +35,7 @@ alerts.configure({
 });
 ```
 
-- using cookie [how to get cookies?](#generate-cookies)
+- using cookie, ([see how to get cookies](#generate-cookies))
 
 ```js
 alerts.configure({
