@@ -206,6 +206,7 @@ function modifyData(alert, newData) {
         const propertyLoc = dataTypeToPropertyLocMap(paramType);
         np.set(alertCopy, propertyLoc, paramValue);
     });
+    console.log(alertCopy);
 
     return alertCopy;
 }
