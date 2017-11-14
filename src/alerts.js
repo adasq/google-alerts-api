@@ -36,7 +36,9 @@ function dataTypeToPropertyLocMap(dataType) {
         lang: LANG_LOC,
         region: REGION_LOC,
         howMany: HOW_MANY_LOC,
-        name: NAME_LOC
+        name: NAME_LOC,
+        deliverTo: DELIVER_TO_LOC,
+        deliverToData: DELIVER_TO_DATA_LOC
     }[dataType];
 }
 
