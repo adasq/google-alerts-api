@@ -207,11 +207,6 @@ function modifyData(alert, newData) {
         np.set(alertCopy, propertyLoc, paramValue);
     });
 
-    
-    console.log(JSON.stringify(alert));
-    console.log(Object.keys(newData))
-    console.log(JSON.stringify(alertCopy));
-
     return alertCopy;
 }
 
