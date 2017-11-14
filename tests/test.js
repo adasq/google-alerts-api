@@ -102,7 +102,6 @@ describe('google', function() {
             api.modify(alert.id, {deliverTo: DELIVER_TO.MAIL, deliverToData: MAIL}, (err, resp, body) => {
                 api.sync(() => {
                     const alert = findAlertByName(api.getAlerts(), NAME);
-                    console.log(alert);
                     expect(alert.deliverTo).to.be(DELIVER_TO.MAIL);
                     expect(alert.deliverToData).to.be(MAIL);
                     done();
