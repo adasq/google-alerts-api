@@ -99,11 +99,11 @@ describe('google', function() {
         it('modify:deliverTo', (done) => {
             const alert = findAlertByName(api.getAlerts(), NAME);
 
-            api.modify(alert.id, {deliverTo: DELIVER_TO.MAIL, deliverToData: MAIL}, (err, resp, body) => {
+            api.modify(alert.id, {deliverTo: DELIVER_TO.MAIL, deliverToData: 'ffmpeg3@gmail.com'}, (err, resp, body) => {
                 api.sync(() => {
                     const alert = findAlertByName(api.getAlerts(), NAME);
                     expect(alert.deliverTo).to.be(DELIVER_TO.MAIL);
-                    expect(alert.deliverToData).to.be(MAIL);
+                    expect(alert.deliverToData).to.be('ffmpeg3@gmail.com');
                     done();
                 });
             });
