@@ -12,7 +12,7 @@ nconf.argv()
     .env()
     .file({ file: './config.json' });
 
-const MAIL = nconf.get('mail');
+const MAIL = 'ffmpeg3@gmail.com';
 const PASSWORD = nconf.get('password');
 const COOKIES = nconf.get('cookies');
 
@@ -88,6 +88,27 @@ describe('google', function() {
             });
         });
 
+        it('creates mail alert', (done) => {
+            api.sync(() => {
+                const alertToCreate = {
+                    howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
+                    sources: [],
+                    lang: 'en',
+                    name: NAME + 2,
+                    region: 'PL',
+                    howMany: HOW_MANY.BEST,
+                    deliverTo: DELIVER_TO.MAIL,
+                    deliverToData: MAIL
+                };
+
+                api.create(alertToCreate, (err, alert) => {
+                    expect(alert.deliverTo).to.be(DELIVER_TO.MAIL);
+                    expect(alert.deliverToData).to.be(MAIL);
+                    done();
+                });
+            });
+        });
+
         it('retrive', (done) => {
             api.sync(() => {
                 const alert = findAlertByName(api.getAlerts(), NAME);
@@ -99,11 +120,11 @@ describe('google', function() {
         it('modify:deliverTo', (done) => {
             const alert = findAlertByName(api.getAlerts(), NAME);
 
-            api.modify(alert.id, {deliverTo: DELIVER_TO.MAIL, deliverToData: 'ffmpeg3@gmail.com'}, (err, resp, body) => {
+            api.modify(alert.id, {deliverTo: DELIVER_TO.MAIL, deliverToData: MAIL}, (err, resp, body) => {
                 api.sync(() => {
                     const alert = findAlertByName(api.getAlerts(), NAME);
                     expect(alert.deliverTo).to.be(DELIVER_TO.MAIL);
-                    expect(alert.deliverToData).to.be('ffmpeg3@gmail.com');
+                    expect(alert.deliverToData).to.be(MAIL);
                     done();
                 });
             });
