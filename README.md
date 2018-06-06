@@ -43,6 +43,11 @@ alerts.configure({
 });
 ```
 
+## Problem with authentication?
+
+- https://accounts.google.com/DisplayUnlockCaptcha
+- https://myaccount.google.com/lesssecureapps
+
 ## How to use
 
 #### Fetch alerts:
