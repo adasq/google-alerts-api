@@ -43,11 +43,6 @@ alerts.configure({
 });
 ```
 
-## Problem with authentication?
-
-- https://accounts.google.com/DisplayUnlockCaptcha
-- https://myaccount.google.com/lesssecureapps
-
 ## How to use
 
 #### Fetch alerts:
@@ -179,6 +174,26 @@ alerts.sync((err) => {
     const alertList = alerts.getAlerts();
 });
 ```
+
+## Problem with authentication?
+
+- https://accounts.google.com/DisplayUnlockCaptcha
+- https://myaccount.google.com/lesssecureapps
+- still can't authenticate? Check out how does the HTTP login response looks like:
+
+```js
+api.reqHandler.login({
+    mail: MAIL,
+    password: PASSWORD
+}, (err, debug) => {
+    console.log(debug.statusCode); 
+    // For success, you should see here '302'.
+    console.log(debug.headers); 
+    // For success, in 'set-cookie' header content, you should see SID, LSID, HID, SSID (etc.) definitions.
+    console.log(debug.body); 
+    // For success, this should be short and include "LoginDoneHtml" and "Moved Temporarily" text inside.
+});
+```	    
 
 [tests]: <https://github.com/adasq/google-alerts-api/blob/master/tests/test.js>
 [how to get cookies]: <https://github.com/adasq/google-alerts-api#generate-cookies>
