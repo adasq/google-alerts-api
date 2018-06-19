@@ -134,5 +134,6 @@ module.exports = {
     create,
     remove,
     modify,
-    getCookies
+    getCookies,
+    reqHandler
 };

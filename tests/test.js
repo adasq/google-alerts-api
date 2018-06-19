@@ -58,6 +58,15 @@ describe('google', function() {
                 done();
             });
         });
+        xit('does not throw for valid mail/pswd configuration', (done) => {
+            api.reqHandler.login({
+                mail: MAIL,
+                password: PASSWORD
+            }, (err, debug) => {
+                expect(debug).not.to.be(null);
+                done();
+            });
+        });
         it('does not throw for valid cookies configuration', (done) => {
             api.configure({
                 cookies: COOKIES

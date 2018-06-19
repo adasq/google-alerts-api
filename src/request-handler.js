@@ -67,7 +67,7 @@ function applyCookies(cookies) {
 function login({mail, password, cookies}, cb) {
     if(cookies){
         setCookies(cookies);
-        return cb(null, jar);
+        return cb(null);
     }
     request({
         url: LOGIN_URL,
@@ -92,7 +92,11 @@ function login({mail, password, cookies}, cb) {
             //     return cb('invalid credentials');
             // }
             // if (resp.statusCode !== 302 ) return cb('invalid credentials');
-            return cb(null, jar);
+            return cb(null, {
+                body,
+                headers: resp.headers,
+                statusCode: resp.statusCode
+            });
         });
     });   
 }
