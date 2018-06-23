@@ -177,7 +177,7 @@ alerts.sync((err) => {
 
 ## Problem with authentication?
 
-- https://accounts.google.com/DisplayUnlockCaptcha
+- https://accounts.google.com/b/1/DisplayUnlockCaptcha (make sure you are editing settings for proper user...)
 - https://myaccount.google.com/lesssecureapps
 - still can't authenticate? Check out how does the HTTP login response looks like:
 
