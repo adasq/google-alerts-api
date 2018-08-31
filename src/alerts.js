@@ -20,6 +20,22 @@ const DELIVER_TO = {
     RSS: 2
 };
 
+const SOURCE_TYPE = {
+    AUTOMATIC: '[null,null,null]',
+    NEWS: '[null,null,[1,3]]',
+    BLOGS: '[null,null,[2,3]]',
+    WEB: '[null,null,[2,1]]',
+
+    NEWS_AND_BLOGS: '[null,null,[3]]',
+    NEWS_AND_WEB: '[null,null,[1]]',
+    BLOGS_AND_WEB: '[null,null,[2]]',
+
+    VIDEO: '[null,[5],[2,1,3]]',
+    BOOKS: '[null,[6],[2,1,3]]',
+    DISCUSSIONS: '[null,[7],[2,1,4]]',
+    FINANCE: '[null,[8],[2,1,4]]',
+};
+
 const ID_LOC = '1';
 const HOW_OFTEN_LOC = '2.6.0.4';
 const RSS_ID_LOC = '2.6.0.11';
@@ -29,6 +45,7 @@ const HOW_MANY_LOC = '2.5';
 const DELIVER_TO_LOC = '2.6.0.1';
 const DELIVER_TO_DATA_LOC = '2.6.0.2';
 const NAME_LOC = '2.3.1';
+const SOURCE_LOC = '';
 
 function dataTypeToPropertyLocMap(dataType) {
     return {
@@ -38,7 +55,8 @@ function dataTypeToPropertyLocMap(dataType) {
         howMany: HOW_MANY_LOC,
         name: NAME_LOC,
         deliverTo: DELIVER_TO_LOC,
-        deliverToData: DELIVER_TO_DATA_LOC
+        deliverToData: DELIVER_TO_DATA_LOC,
+        sources: SOURCE_LOC
     }[dataType];
 }
 
@@ -103,18 +121,19 @@ function getRssFeedByCreateResponse(body) {
             
             id: np.get(alert, ID_LOC),
             howOften: np.get(alert, HOW_OFTEN_LOC),
-            sources: getSources(alert),
+            sources: JSON.stringify(getSources(alert)),
             lang: np.get(alert, LANG_LOC),            
             region: np.get(alert, REGION_LOC),
             howMany: np.get(alert, HOW_MANY_LOC),
             deliverTo: np.get(alert, DELIVER_TO_LOC),
             rss: getRss(alert),
-            deliverToData: np.get(alert, DELIVER_TO_DATA_LOC)            
+            deliverToData: np.get(alert, DELIVER_TO_DATA_LOC)
         };
     }
 
     function create(data, createId) {
-        const {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
+        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
+        sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
         const n = null;
         const getHowOftenPadding = (howOften) => {
             if(howOften === HOW_OFTEN.AT_MOST_ONCE_A_DAY) {
@@ -126,7 +145,7 @@ function getRssFeedByCreateResponse(body) {
             return [];
         }
         const rssId = "0";
-        return [n,
+        const result = [n,
                     [
                         n,n,n,
                         [
@@ -143,6 +162,7 @@ function getRssFeedByCreateResponse(body) {
                         ...sources
                     ]
                 ];
+        return result;
     }
 
 
@@ -198,20 +218,27 @@ function getAlertCopy(alert) {
 }
 
 function modifyData(alert, newData) {
-    
     const alertCopy = getAlertCopy(alert);
     
     Object.keys(newData).forEach(paramType => {
         const paramValue = newData[paramType];
-        const propertyLoc = dataTypeToPropertyLocMap(paramType);
-        np.set(alertCopy, propertyLoc, paramValue);
+        if(paramType === 'sources') {
+            const parsed = JSON.parse(paramValue)
+            np.set(alertCopy, '2.7', parsed[0]);
+            np.set(alertCopy, '2.8', parsed[1]);
+            np.set(alertCopy, '2.9', parsed[2]);
+        } else {
+            const propertyLoc = dataTypeToPropertyLocMap(paramType);
+            np.set(alertCopy, propertyLoc, paramValue);
+        }
+        
     });
 
     return alertCopy;
 }
 
 module.exports = {
-    HOW_OFTEN, DELIVER_TO, HOW_MANY,
+    HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE,
     findAlertById, modifyData,
     getCreateIdByState, getAlertsByState, getRequestXByState,
     getStateByBody, create, parseAlertToData, printAlertData,
