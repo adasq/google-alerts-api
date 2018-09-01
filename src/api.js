@@ -1,7 +1,7 @@
 const reqHandler = require('./request-handler.js');
 const alerts = require('./alerts.js');
 
-const { HOW_OFTEN, DELIVER_TO, HOW_MANY } = alerts;
+const { HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE } = alerts;
 const config = { mail: '', password: ''};
 
 let isAuthenticated = false;
@@ -126,7 +126,7 @@ function create(createData, cb) {
 }
 
 module.exports = {
-    HOW_OFTEN, DELIVER_TO, HOW_MANY, ERROR,
+    HOW_OFTEN, DELIVER_TO, HOW_MANY, ERROR, SOURCE_TYPE,
     configure,
     generateCookies,
     sync,
