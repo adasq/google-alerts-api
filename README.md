@@ -78,7 +78,7 @@ function printAlertInfo(alert){
     name: '"Donald Trump * ISIS"',
     id: '4f94515ec736ef62:ade5b03803caa237:com:en:PL:R',
     howOften: 2, //use HOW_OFTEN enum to find out proper meaning
-    sources: [], // sources are not supported yet
+    sources: SOURCE_TYPE.BLOG,
     lang: 'en',
     region: 'PL',
     howMany: 3, //use HOW_MANY enum to find out proper meaning
@@ -115,13 +115,33 @@ function printAlertInfo(alert){
 }
 ```
 
+#### Available source types:
+
+```
+const SOURCE_TYPE = {
+    AUTOMATIC,
+    NEWS,
+    BLOGS,
+    WEB,
+
+    NEWS_AND_BLOGS,
+    NEWS_AND_WEB,
+    BLOGS_AND_WEB,
+
+    VIDEO,
+    BOOKS,
+    DISCUSSIONS,
+    FINANCE,
+};
+```
+
 #### Create alert:
 
 ```js
 alerts.sync(() => {
     const alertToCreate = {
     	howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
-	sources: [],
+	    sources: SOURCE_TYPE.AUTOMATIC, // default one
         lang: 'en',
         name: 'NodeJS AND "Chrome V8"',
         region: 'PL', // or do not specify it at all, if you want "All Regions"
