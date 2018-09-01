@@ -49,7 +49,7 @@ alerts.configure({
 
 ```js
 const alerts = require('google-alerts-api');
-const { HOW_OFTEN, DELIVER_TO, HOW_MANY } = alerts;
+const { HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE } = alerts;
 
 alerts.configure({
     mail: 'your_mail@gmail.com',
@@ -62,7 +62,7 @@ alerts.sync((err) => {
     alertList.forEach(alert => printAlertInfo);
 });
 
-function printAlertInfo(alert){
+function printAlertInfo(alert) {
     console.log('name:', alert.name);
     //'How Many' property information:
     if (alert.howMany === HOW_MANY.BEST) {
@@ -78,7 +78,7 @@ function printAlertInfo(alert){
     name: '"Donald Trump * ISIS"',
     id: '4f94515ec736ef62:ade5b03803caa237:com:en:PL:R',
     howOften: 2, //use HOW_OFTEN enum to find out proper meaning
-    sources: SOURCE_TYPE.BLOG,
+    sources: '...', // some of SOURCE_TYPE enum property, SOURCE_TYPE.AUTOMATIC by default
     lang: 'en',
     region: 'PL',
     howMany: 3, //use HOW_MANY enum to find out proper meaning
@@ -141,7 +141,7 @@ const SOURCE_TYPE = {
 alerts.sync(() => {
     const alertToCreate = {
     	howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
-	    sources: SOURCE_TYPE.AUTOMATIC, // default one
+	sources: SOURCE_TYPE.AUTOMATIC, // default one
         lang: 'en',
         name: 'NodeJS AND "Chrome V8"',
         region: 'PL', // or do not specify it at all, if you want "All Regions"
