@@ -45,7 +45,6 @@ const HOW_MANY_LOC = '2.5';
 const DELIVER_TO_LOC = '2.6.0.1';
 const DELIVER_TO_DATA_LOC = '2.6.0.2';
 const NAME_LOC = '2.3.1';
-const SOURCE_LOC = '';
 
 function dataTypeToPropertyLocMap(dataType) {
     return {
@@ -56,7 +55,6 @@ function dataTypeToPropertyLocMap(dataType) {
         name: NAME_LOC,
         deliverTo: DELIVER_TO_LOC,
         deliverToData: DELIVER_TO_DATA_LOC,
-        sources: SOURCE_LOC
     }[dataType];
 }
 

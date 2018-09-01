@@ -91,6 +91,7 @@ describe('google', function() {
 
                 api.create(alertToCreate, (err, alert) => {
                     expect(alert.name).to.be(alertToCreate.name);
+                    expect(alert.sources).to.be(SOURCE_TYPE.AUTOMATIC);
                     done();
                 });
             });
@@ -209,6 +210,17 @@ describe('google', function() {
             api.remove(alert.id, (err, resp, body) => {
                 api.sync(() => {
                      const alert = findAlertByName(api.getAlerts(), MODIFIED_NAME);
+                     expect(alert).to.be(null);
+                     done();
+                });
+            });
+        });  
+
+        it('remove NAME 2', (done) => {
+            const alert = findAlertByName(api.getAlerts(), NAME + 2);
+            api.remove(alert.id, (err, resp, body) => {
+                api.sync(() => {
+                     const alert = findAlertByName(api.getAlerts(), NAME + 2);
                      expect(alert).to.be(null);
                      done();
                 });
