@@ -10,6 +10,9 @@
     "type": "git",
     "url": "https://github.com/adasq/google-alerts-api.git"
   },
+  "engines": { 
+    "node": ">= 8.0.0"
+  },
   "author": "adasq",
   "license": "ISC",
   "dependencies": {
