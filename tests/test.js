@@ -6,7 +6,7 @@ const { parseAlertToData, printAlertData} = require('../src/alerts.js');
 
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE } = api;
 
-const TIMEOUT_MS = 100 * 1000;
+const TIMEOUT_MS = 10 * 1000;
 
 nconf.argv()
     .env()
@@ -19,18 +19,17 @@ const COOKIES = nconf.get('cookies');
 const NAME = generateRandomName();
 const MODIFIED_NAME = NAME + ' modified';
 
-describe('generateCookies', function() {
+xdescribe('generateCookies', function() {
     this.timeout(TIMEOUT_MS);
     it('generateCookies', done => {
         api.generateCookies(MAIL, PASSWORD, (err, cookies) => {
             if(err) return console.log(err);
-            console.log(cookies)
             fs.writeFileSync('cookies.data', cookies);
         });
     })
 })
 
-xdescribe('username / password login', function() {
+describe('username / password login', function() {
     this.timeout(TIMEOUT_MS);
     it('username / password login', done => {
         api.configure({

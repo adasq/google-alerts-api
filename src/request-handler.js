@@ -14,15 +14,15 @@ const ALERTS_DELETE_URL = 'https://www.google.com/alerts/delete?x={requestX}';
 
 const COOKIES_URL = 'https://accounts.google.com';
 
-function removeCookies(){
+function removeCookies() {
     jar = request.jar();
 }
 
-function getCookies(){
+function getCookies() {
     return parsedCookies;
 }
 
-function setCookies(cookies){
+function setCookies(cookies) {
     applyCookies(cookies);
 }
 
@@ -62,16 +62,16 @@ function getCaptchaImageByBody(body) {
 }
 
 async function askUser(commandLineQuestion) {
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-            return new Promise((resolve, reject) => {
-                rl.question(commandLineQuestion, answer => {
-                    rl.close();
-                    resolve(answer)
-                })
-            })
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    return new Promise((resolve, reject) => {
+        rl.question(commandLineQuestion, answer => {
+            rl.close();
+            resolve(answer);
+        })
+    })
 }
 
 function createFormByBody(body) {
@@ -79,13 +79,13 @@ function createFormByBody(body) {
     let form = {};
     $('#gaia_loginform input').map((i, el) => {
         const elem = $(el);
-        form[ elem.attr('name') ] = elem.attr('value');
+        form[elem.attr('name')] = elem.attr('value');
     })
     return form;
 }
 
-function login({mail, password, cookies}, cb) {
-    if(cookies){
+function login({ mail = '', password = '', cookies }, cb) {
+    if (cookies) {
         setCookies(cookies);
         return cb(null);
     }
@@ -93,11 +93,11 @@ function login({mail, password, cookies}, cb) {
         url: LOGIN_URL,
         jar
     }, (err, resp, body) => {
-        if(err) return cb(err);
+        if (err) return cb(err);
 
         const form = createFormByBody(body);
-        form.Email = mail+'';
-        form.Passwd = password+'';
+        form.Email = mail;
+        form.Passwd = password;
 
         request({
             method: 'POST',
@@ -109,18 +109,18 @@ function login({mail, password, cookies}, cb) {
             const isCaptchaRequired = !!getCaptchaImageByBody(body);
             rememberCookies(jar.getCookies(COOKIES_URL));
 
-            if( isCaptchaRequired ) {
+            if (isCaptchaRequired) {
                 const captchaImageUrl = getCaptchaImageByBody(body);
 
                 (async () => {
+                    console.log(`Captcha image URL:`);
                     console.log(captchaImageUrl);
-                    require('fs').writeFileSync('xxx', captchaImageUrl)
-                    const logincaptcha = await askUser('Please, type captcha:')
 
-                const form = createFormByBody(body);
-                form.Email = mail+'';
-                form.Passwd = password+'';
-                form.logincaptcha = logincaptcha;
+                    const logincaptcha = await askUser('Please, re-type CAPTCHA:')
+
+                    const form = createFormByBody(body);
+                    form.Passwd = password;
+                    form.logincaptcha = logincaptcha;
 
                     request({
                         method: 'POST',
@@ -137,10 +137,10 @@ function login({mail, password, cookies}, cb) {
                 });
             }
         }
-    });   
+    });
 }
 
-function modify(requestX, form, cb){
+function modify(requestX, form, cb) {
     const url = ALERTS_MODIFY_URL.replace('{requestX}', requestX);
     request({
         method: 'POST',
@@ -170,22 +170,22 @@ function remove(requestX, id, cb) {
         form: {
             params: JSON.stringify([null, id])
         }
-    }, cb);    
+    }, cb);
 }
 
 function get(cb) {
     request({
         url: ALERTS_URL, jar
-    }, cb);    
+    }, cb);
 }
 
-function checkRssSource(url, cb){
+function checkRssSource(url, cb) {
     return request(url, (err, resp, body) => {
-        if(err){
+        if (err) {
             return cb(err);
         }
         cb(null, resp.statusCode === 200);
-    });  
+    });
 }
 
 module.exports = {
