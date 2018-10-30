@@ -29,7 +29,7 @@ xdescribe('generateCookies', function() {
     })
 })
 
-describe('username / password login', function() {
+xdescribe('username / password login', function() {
     this.timeout(TIMEOUT_MS);
     it('username / password login', done => {
         api.configure({
@@ -43,7 +43,7 @@ describe('username / password login', function() {
     })
 })
 
-xdescribe('google', function() {
+describe('google', function() {
     this.timeout(TIMEOUT_MS);
     describe('alerts', () => {
         xit('throws for incorrect configuration', (done) => {
