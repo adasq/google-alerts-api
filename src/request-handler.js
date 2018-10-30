@@ -1,5 +1,6 @@
 const request = require('request');
 let cheerio = require('cheerio');
+const readline = require('readline');
 
 var jar = request.jar();
 let parsedCookies = null;
@@ -17,15 +18,6 @@ function removeCookies(){
     jar = request.jar();
 }
 
-function createFormByBody(body) {
-    const form = {};
-    const $ = cheerio.load(body);
-    const inputs = cheerio($('form').html()).serializeArray();
-    inputs.forEach(input => {
-        form[input.name] = input.value;
-    });
-    return form;
-}
 function getCookies(){
     return parsedCookies;
 }
@@ -64,6 +56,34 @@ function applyCookies(cookies) {
         jar.setCookie(newCookie, COOKIES_URL);
     });
 }
+
+function getCaptchaImageByBody(body) {
+    return cheerio.load(body)('img[src^="https://accounts.google.com/Captcha"]').attr('src');
+}
+
+async function askUser(commandLineQuestion) {
+            const rl = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+            return new Promise((resolve, reject) => {
+                rl.question(commandLineQuestion, answer => {
+                    rl.close();
+                    resolve(answer)
+                })
+            })
+}
+
+function createFormByBody(body) {
+    const $ = cheerio.load(body);
+    let form = {};
+    $('#gaia_loginform input').map((i, el) => {
+        const elem = $(el);
+        form[ elem.attr('name') ] = elem.attr('value');
+    })
+    return form;
+}
+
 function login({mail, password, cookies}, cb) {
     if(cookies){
         setCookies(cookies);
@@ -74,30 +94,49 @@ function login({mail, password, cookies}, cb) {
         jar
     }, (err, resp, body) => {
         if(err) return cb(err);
+
         const form = createFormByBody(body);
         form.Email = mail+'';
         form.Passwd = password+'';
+
         request({
             method: 'POST',
             url: LOGIN_PASSWORD_URL,
             form, jar
-        }, (err, resp, body) => {
+        }, postCb);
+
+        function postCb(err, resp, body) {
+            const isCaptchaRequired = !!getCaptchaImageByBody(body);
             rememberCookies(jar.getCookies(COOKIES_URL));
-            // require('fs').writeFileSync('./xxx', body);
-            // console.log(resp.headers['set-cookie'], resp.statusCode)
-            if (err) return cb(err);
-            // if(resp.headers['set-cookie'] && resp.statusCode === 302){
-            //      return cb(null, jar);
-            // }else{
-            //     return cb('invalid credentials');
-            // }
-            // if (resp.statusCode !== 302 ) return cb('invalid credentials');
-            return cb(null, {
-                body,
-                headers: resp.headers,
-                statusCode: resp.statusCode
-            });
-        });
+
+            if( isCaptchaRequired ) {
+                const captchaImageUrl = getCaptchaImageByBody(body);
+
+                (async () => {
+                    console.log(captchaImageUrl);
+                    require('fs').writeFileSync('xxx', captchaImageUrl)
+                    const logincaptcha = await askUser('Please, type captcha:')
+
+                const form = createFormByBody(body);
+                form.Email = mail+'';
+                form.Passwd = password+'';
+                form.logincaptcha = logincaptcha;
+
+                    request({
+                        method: 'POST',
+                        url: LOGIN_PASSWORD_URL,
+                        form, jar
+                    }, postCb)
+                })()
+            } else {
+                if (err) return cb(err);
+                return cb(null, {
+                    body,
+                    headers: resp.headers,
+                    statusCode: resp.statusCode
+                });
+            }
+        }
     });   
 }
 
