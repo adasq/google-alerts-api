@@ -12,7 +12,7 @@ nconf.argv()
     .env()
     .file({ file: './config.json' });
 
-const MAIL = 'minibottersofficial@gmail.com';
+const MAIL = 'ffmpeg3@gmail.com';
 const PASSWORD = nconf.get('password');
 const COOKIES = nconf.get('cookies');
 
