@@ -35,6 +35,8 @@ alerts.configure({
 });
 ```
 
+#### IMPORTANT: Due to the latest changes in Google, authentication (with disabled JavaScript) requires Captcha form to be filled in. You will have to do it within command line. If you do not want to fill it each time, generate cookies and reuse it later on ([see how to get cookies](#generate-cookies)) 
+
 - using cookie, ([see how to get cookies](#generate-cookies))
 
 ```js

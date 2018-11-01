@@ -6,7 +6,7 @@ const { parseAlertToData, printAlertData} = require('../src/alerts.js');
 
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE } = api;
 
-const TIMEOUT_MS = 10 * 1000;
+const TIMEOUT_MS = 100 * 1000;
 
 nconf.argv()
     .env()
@@ -19,10 +19,35 @@ const COOKIES = nconf.get('cookies');
 const NAME = generateRandomName();
 const MODIFIED_NAME = NAME + ' modified';
 
+xdescribe('generateCookies', function() {
+    this.timeout(TIMEOUT_MS);
+    it('generateCookies', done => {
+        api.generateCookies(MAIL, PASSWORD, (err, cookies) => {
+            if(err) return console.log(err);
+            fs.writeFileSync('cookies.data', cookies);
+            done()
+        });
+    })
+})
+
+xdescribe('username / password login', function() {
+    this.timeout(TIMEOUT_MS);
+    it('username / password login', done => {
+        api.configure({
+            mail: MAIL,
+            password: PASSWORD
+        });
+        api.sync((err) => {
+            expect(err).to.be(null);
+            done();
+        });
+    })
+})
+
 describe('google', function() {
     this.timeout(TIMEOUT_MS);
     describe('alerts', () => {
-        it('throws for incorrect configuration', (done) => {
+        xit('throws for incorrect configuration', (done) => {
             api.configure({
                 mail: undefined
             });
@@ -31,7 +56,7 @@ describe('google', function() {
                 done();
             });
         });
-        it('throws for invalid configuration', (done) => {
+        xit('throws for invalid configuration', (done) => {
             api.configure({
                 mail: MAIL,
                 password: `incorrect${PASSWORD}` 
@@ -48,22 +73,13 @@ describe('google', function() {
                 done();
             });
         });
-        xit('does not throw for valid mail/pswd configuration', (done) => {
+       xit('does not throw for valid mail/pswd configuration', (done) => {
             api.configure({
                 mail: MAIL,
                 password: PASSWORD
             });
             api.sync((err) => {
                 expect(err).to.be(null);
-                done();
-            });
-        });
-        xit('does not throw for valid mail/pswd configuration', (done) => {
-            api.reqHandler.login({
-                mail: MAIL,
-                password: PASSWORD
-            }, (err, debug) => {
-                expect(debug).not.to.be(null);
                 done();
             });
         });
