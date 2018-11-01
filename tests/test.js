@@ -6,7 +6,7 @@ const { parseAlertToData, printAlertData} = require('../src/alerts.js');
 
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE } = api;
 
-const TIMEOUT_MS = 10 * 1000;
+const TIMEOUT_MS = 100 * 1000;
 
 nconf.argv()
     .env()
@@ -25,6 +25,7 @@ xdescribe('generateCookies', function() {
         api.generateCookies(MAIL, PASSWORD, (err, cookies) => {
             if(err) return console.log(err);
             fs.writeFileSync('cookies.data', cookies);
+            done()
         });
     })
 })
@@ -79,15 +80,6 @@ describe('google', function() {
             });
             api.sync((err) => {
                 expect(err).to.be(null);
-                done();
-            });
-        });
-        xit('does not throw for valid mail/pswd configuration', (done) => {
-            api.reqHandler.login({
-                mail: MAIL,
-                password: PASSWORD
-            }, (err, debug) => {
-                expect(debug).not.to.be(null);
                 done();
             });
         });
