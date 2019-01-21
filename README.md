@@ -201,6 +201,7 @@ alerts.sync((err) => {
 
 - https://accounts.google.com/b/1/DisplayUnlockCaptcha (make sure you are editing settings for proper user...)
 - https://myaccount.google.com/lesssecureapps
+- Generate cookies in the way described here: https://github.com/adasq/google-alerts-api/issues/17#issuecomment-453865203
 - still can't authenticate? Check out how does the HTTP login response looks like:
 
 ```js
