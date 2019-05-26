@@ -4,14 +4,14 @@
 
 # google-alerts-api
 
-Google Alerts API wrapper for nodejs. See [tests] for all features coverage.
+Google Alerts API for nodejs. See [tests] for all features coverage.
 
 ## Features
 
-- Creating alerts (no support for few parameters)
-- Fetching alerts
-- Modifing alerts (no support for few parameters)
-- Removing alerts
+- **Creating alerts** (no support for few parameters)
+- **Fetching alerts**
+- **Modifing alerts** (no support for few parameters)
+- **Removing alerts**
 
 
 ## Getting started
