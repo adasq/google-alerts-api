@@ -32,19 +32,19 @@ const SOURCE_TYPE = {
 
     VIDEO: '[null,[5],[2,1,3]]',
     BOOKS: '[null,[6],[2,1,3]]',
-    DISCUSSIONS: '[null,[7],[2,1,4]]',
-    FINANCE: '[null,[8],[2,1,4]]',
+    DISCUSSIONS: '[null,[7],[2,1,3]]',
+    FINANCE: '[null,[8],[2,1,3]]',
 };
 
-const ID_LOC = '1';
+const ID_LOC = '0';
 const HOW_OFTEN_LOC = '2.6.0.4';
-const RSS_ID_LOC = '2.6.0.11';
-const LANG_LOC = '2.3.3.1';
-const REGION_LOC = '2.3.3.2';
-const HOW_MANY_LOC = '2.5';
-const DELIVER_TO_LOC = '2.6.0.1';
-const DELIVER_TO_DATA_LOC = '2.6.0.2';
-const NAME_LOC = '2.3.1';
+const RSS_ID_LOC = '1.5.0.10';
+const LANG_LOC = '1.2.2.0';
+const REGION_LOC = '1.2.2.1';
+const HOW_MANY_LOC = '1.4';
+const DELIVER_TO_LOC = '1.5.0.0';
+const DELIVER_TO_DATA_LOC = '1.5.0.1';
+const NAME_LOC = '1.2.0';
 
 function dataTypeToPropertyLocMap(dataType) {
     return {
@@ -70,9 +70,10 @@ function getStateByBody(body) {
             let state = null;            
             $('script').each(function(i, elem) {
                 let text = $(this).text();
+
                 if(text.indexOf('window.STATE') > -1){
-                    text= text.trim().substr(15);
-                    text = text.substr(0, text.length-1);
+                    text= text.trim().substr(25);
+                    text = text.substr(0, text.length-6);
                     state = JSON.parse(text);
                 }
             });
@@ -103,8 +104,9 @@ function getRssFeedByCreateResponse(body) {
 }
 
     function parseAlertToData(alert) {
+
         function getSources(alert) {
-            return [np.get(alert, "2.7"), np.get(alert, "2.8"), np.get(alert, "2.9")];
+            return [np.get(alert, "1.6"), np.get(alert, "1.7"), np.get(alert, "1.8")];
         }
         function getRss(alert) {
             const rssId = np.get(alert, RSS_ID_LOC);
@@ -113,12 +115,20 @@ function getRssFeedByCreateResponse(body) {
             if (typeof userId !== 'string') { return ''; }
             return prepareRssFeedUrl(userId, rssId);
         }
-        
-        return {
+
+        function getHowOften(alert) {
+            const hoModel = np.get(alert, '1.5.0.2');
+            if(hoModel.length === 0) return HOW_OFTEN.AS_IT_HAPPENS;
+            if(hoModel.length === 2) return HOW_OFTEN.AT_MOST_ONCE_A_DAY;
+            if(hoModel.length === 3) return HOW_OFTEN.AT_MOST_ONCE_A_WEEK;
+        }
+
+        const name = np.get(alert, NAME_LOC)
+
+        const alertD = {
             name: np.get(alert, NAME_LOC),
-            
             id: np.get(alert, ID_LOC),
-            howOften: np.get(alert, HOW_OFTEN_LOC),
+            howOften: getHowOften(alert),
             sources: JSON.stringify(getSources(alert)),
             lang: np.get(alert, LANG_LOC),            
             region: np.get(alert, REGION_LOC),
@@ -127,22 +137,58 @@ function getRssFeedByCreateResponse(body) {
             rss: getRss(alert),
             deliverToData: np.get(alert, DELIVER_TO_DATA_LOC)
         };
+                
+        return alertD;
     }
 
-    function create(data, createId) {
-        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
+    function create(data, createId, rssId) {
+        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData, rss} = data;
         sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
         const n = null;
         const getHowOftenPadding = (howOften) => {
             if(howOften === HOW_OFTEN.AT_MOST_ONCE_A_DAY) {
-                return [n, n, 15];
+                return [n, n, 19];
             }
             if(howOften === HOW_OFTEN.AT_MOST_ONCE_A_WEEK) {
-                return [n, n, 15, 4];
+                return [n, n, 19, 4];
             }            
             return [];
         }
-        const rssId = "0";
+   
+        const result = [n, data.id ? data.id : undefined,
+                    [
+                        n,n,n,
+                        [
+                            n, name, "com", [n, lang, region || 'US'], n, n, n, region ? 1 : 0, 1
+                        ],
+                        n, howMany,
+                        [
+                            [
+                                n, deliverTo, deliverToData,
+                                [...getHowOftenPadding(howOften)],
+                                howOften,"pl-US",1,n,n,n,n, rssId || "0", n,n, createId
+                            ]
+                        ],
+                        ...sources
+                    ]
+                ];
+        return result;
+    }
+
+    function create2(data, createId, rssId) {
+        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData, rss} = data;
+        sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
+        const n = null;
+        const getHowOftenPadding = (howOften) => {
+            if(howOften === HOW_OFTEN.AT_MOST_ONCE_A_DAY) {
+                return [n, n, 19];
+            }
+            if(howOften === HOW_OFTEN.AT_MOST_ONCE_A_WEEK) {
+                return [n, n, 19, 4];
+            }            
+            return [];
+        }
+   
         const result = [n,
                     [
                         n,n,n,
@@ -154,7 +200,7 @@ function getRssFeedByCreateResponse(body) {
                             [
                                 n, deliverTo, deliverToData,
                                 [...getHowOftenPadding(howOften)],
-                                howOften,"pl-US",n,n,n,n,n, rssId, n,n, createId
+                                howOften,"pl-US",n,n,n,n,n, rssId || "0", n,n, createId
                             ]
                         ],
                         ...sources
@@ -162,8 +208,6 @@ function getRssFeedByCreateResponse(body) {
                 ];
         return result;
     }
-
-
 
 
 function toString(category, value) {
@@ -178,14 +222,14 @@ function toString(category, value) {
 }
 
     function getCreateIdByState(state) {
-        return state[2][6][0][14];
+        return state[1][5][0][13];
     }
 
     function getAlertsByState(state){
         if (state[1] === null) {
             return [];
         }
-        return state[1][1];
+        return state[0][0];
     }
 
 function printAlertData(data) {
@@ -208,36 +252,40 @@ function findAlertById(id, state) {
 }
 
 function getRequestXByState(state) {
-    return state[3];
+    return state[state.length - 4];
 }
 
 function getAlertCopy(alert) {
     return JSON.parse(JSON.stringify(alert));
 }
 
-function modifyData(alert, newData) {
+function modifyData(alert, newData, createId) {
     const alertCopy = getAlertCopy(alert);
-    
-    Object.keys(newData).forEach(paramType => {
-        const paramValue = newData[paramType];
-        if(paramType === 'sources') {
-            const parsed = JSON.parse(paramValue)
-            np.set(alertCopy, '2.7', parsed[0]);
-            np.set(alertCopy, '2.8', parsed[1]);
-            np.set(alertCopy, '2.9', parsed[2]);
-        } else {
-            const propertyLoc = dataTypeToPropertyLocMap(paramType);
-            np.set(alertCopy, propertyLoc, paramValue);
-        }
-        
-    });
+    const n = null;
+    const rssId = np.get(alert, RSS_ID_LOC);
 
-    return alertCopy;
+    const newAlert = { ...parseAlertToData(alert), ...newData };
+    const request = create(newAlert, createId, rssId)
+    // Object.keys(newData).forEach(paramType => {
+    //     const paramValue = newData[paramType];
+    //     if(paramType === 'sources') {
+    //         const parsed = JSON.parse(paramValue)
+    //         np.set(alertCopy, '1.6', parsed[0]);
+    //         np.set(alertCopy, '1.7', parsed[1]);
+    //         np.set(alertCopy, '1.8', parsed[2]);
+    //     } else {
+    //         const propertyLoc = dataTypeToPropertyLocMap(paramType);
+    //         np.set(alertCopy, propertyLoc, paramValue);
+    //     }
+        
+    // });
+
+    return request;
 }
 
 module.exports = {
     HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE,
-    findAlertById, modifyData,
+    findAlertById, modifyData, create2,
     getCreateIdByState, getAlertsByState, getRequestXByState,
     getStateByBody, create, parseAlertToData, printAlertData,
     isLoggedInByState, getRssFeedByCreateResponse

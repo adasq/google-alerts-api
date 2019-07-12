@@ -46,6 +46,7 @@ xdescribe('username / password login', function() {
 
 describe('google', function() {
     this.timeout(TIMEOUT_MS);
+    
     describe('alerts', () => {
         xit('throws for incorrect configuration', (done) => {
             api.configure({
@@ -83,42 +84,40 @@ describe('google', function() {
                 done();
             });
         });
-        it('does not throw for valid cookies configuration', (done) => {
+
+        xit('creates', (done) => {
             api.configure({
                 cookies: COOKIES
             });
-            api.sync((err) => {
-                expect(err).to.be(null);
-                done();
-            });
-        });
-
-        it('creates', (done) => {
             api.sync(() => {
                 const alertToCreate = {
-                    howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
-                    lang: 'en',
                     name: NAME,
+                    howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
+                    sources: SOURCE_TYPE.AUTOMATIC,
+                    lang: 'en',
                     region: 'PL',
                     howMany: HOW_MANY.BEST,
-                    deliverTo: DELIVER_TO.RSS,
-                    deliverToData: '',
+                    deliverTo: DELIVER_TO.MAIL,
+                    deliverToData: 'ffmpeg3@gmail.com',
                 };
 
                 api.create(alertToCreate, (err, alert) => {
+                    console.log(err)
                     expect(alert.name).to.be(alertToCreate.name);
-                    expect(alert.sources).to.be(SOURCE_TYPE.AUTOMATIC);
                     done();
                 });
             });
         });
 
         it('creates mail alert', (done) => {
+            api.configure({
+                cookies: COOKIES
+            });
             api.sync(() => {
                 const alertToCreate = {
                     howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
                     lang: 'en',
-                    name: NAME + 2,
+                    name: NAME,
                     region: 'PL',
                     howMany: HOW_MANY.BEST,
                     deliverTo: DELIVER_TO.MAIL,
@@ -133,117 +132,73 @@ describe('google', function() {
             });
         });
 
-        it('retrive', (done) => {
+        it('retrive mail alert', (done) => {
+            api.configure({
+                cookies: COOKIES
+            });
             api.sync(() => {
                 const alert = findAlertByName(api.getAlerts(), NAME);
                 expect(alert.name).to.be(NAME);
                 done();
             });
         });
-        it('modify:sources:BLOGS', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME);
 
-            api.modify(alert.id, {sources: SOURCE_TYPE.BLOGS}, (err, resp, body) => {
-                api.sync(() => {
-                    const alert = findAlertByName(api.getAlerts(), NAME);
-                    expect(alert.sources).to.be(SOURCE_TYPE.BLOGS);
-                    done();
+        [
+            {howOften: HOW_OFTEN.AS_IT_HAPPENS},
+            {howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY},
+            {howOften: HOW_OFTEN.AT_MOST_ONCE_A_WEEK},
+
+            {sources: SOURCE_TYPE.AUTOMATIC},
+            {sources: SOURCE_TYPE.NEWS},
+            {sources: SOURCE_TYPE.BLOGS},
+            {sources: SOURCE_TYPE.WEB},
+
+            {sources: SOURCE_TYPE.NEWS_AND_BLOGS},
+            {sources: SOURCE_TYPE.NEWS_AND_WEB},
+            {sources: SOURCE_TYPE.BLOGS_AND_WEB},
+
+            {sources: SOURCE_TYPE.VIDEO},
+            {sources: SOURCE_TYPE.BOOKS},
+            {sources: SOURCE_TYPE.DISCUSSIONS},
+            {sources: SOURCE_TYPE.FINANCE},
+
+            { lang: 'pl'},
+
+            { region: 'RU'},
+
+            { howMany: HOW_MANY.BEST },
+            { howMany: HOW_MANY.ALL },
+            
+            { deliverTo: DELIVER_TO.RSS, deliverToData: '' },
+            { deliverTo: DELIVER_TO.MAIL, deliverToData: 'ffmpeg3@gmail.com' }
+        ].forEach((modifiedData) => xit(`modifing: ${Object.keys(modifiedData)}`, (done) => {
+            api.sync((err) => {
+                expect(err).to.be(null);
+                const alert = findAlertByName(api.getAlerts(), NAME);
+
+                api.modify(alert.id, modifiedData, () => {
+                    expect(err).to.be(null);
+                    api.sync(() => {
+                        const alert = findAlertByName(api.getAlerts(), NAME);
+                        expect(alert).to.eql({...alert, ...modifiedData});
+                        done();
+                    });
                 });
             });
-        });
+        }))
 
-        it('modify:sources:NEWS_AND_WEB', (done) => {
+        it('remove NAME', (done) => {
             const alert = findAlertByName(api.getAlerts(), NAME);
-
-            api.modify(alert.id, {sources: SOURCE_TYPE.NEWS_AND_WEB}, (err, resp, body) => {
-                api.sync(() => {
-                    const alert = findAlertByName(api.getAlerts(), NAME);
-                    expect(alert.sources).to.be(SOURCE_TYPE.NEWS_AND_WEB);
-                    done();
-                });
-            });
-        });
-
-        it('modify:deliverTo', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME);
-
-            api.modify(alert.id, {deliverTo: DELIVER_TO.MAIL, deliverToData: MAIL}, (err, resp, body) => {
-                api.sync(() => {
-                    const alert = findAlertByName(api.getAlerts(), NAME);
-                    expect(alert.deliverTo).to.be(DELIVER_TO.MAIL);
-                    expect(alert.deliverToData).to.be(MAIL);
-                    done();
-                });
-            });
-        });
-
-        it('modify:lang', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME);
-            api.modify(alert.id, {lang: 'pl'}, (err, resp, body) => {
-                api.sync(() => {
-                     const alert = findAlertByName(api.getAlerts(), NAME);
-                     expect(alert.lang).to.be('pl');
-                     done();
-                });
-            });
-        });
-
-        it('modify:region', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME);
-            api.modify(alert.id, {region: 'RU'}, (err, resp, body) => {
-                api.sync(() => {
-                     const alert = findAlertByName(api.getAlerts(), NAME);
-                     expect(alert.region).to.be('RU');
-                     done();
-                });
-            });
-        });
-
-        it('modify:howMany', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME);
-            api.modify(alert.id, {howMany: HOW_MANY.ALL}, (err, resp, body) => {
-                api.sync(() => {
-                     const alert = findAlertByName(api.getAlerts(), NAME);
-                     expect(alert.howMany).to.be(HOW_MANY.ALL);
-                     done();
-                });
-            });
-        });
-
-        it('modify:name', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME);
-            api.modify(alert.id, {name: MODIFIED_NAME}, (err, resp, body) => {
-                api.sync(() => {
-                     const alert = findAlertByName(api.getAlerts(), MODIFIED_NAME);
-                     expect(alert.name).to.be(MODIFIED_NAME);
-                     done();
-                });
-            });
-        });           
-
-        it('remove', (done) => {
-            const alert = findAlertByName(api.getAlerts(), MODIFIED_NAME);
             api.remove(alert.id, (err, resp, body) => {
                 api.sync(() => {
-                     const alert = findAlertByName(api.getAlerts(), MODIFIED_NAME);
+                     const alert = findAlertByName(api.getAlerts(), NAME);
                      expect(alert).to.be(null);
                      done();
                 });
             });
         });  
-
-        it('remove NAME 2', (done) => {
-            const alert = findAlertByName(api.getAlerts(), NAME + 2);
-            api.remove(alert.id, (err, resp, body) => {
-                api.sync(() => {
-                     const alert = findAlertByName(api.getAlerts(), NAME + 2);
-                     expect(alert).to.be(null);
-                     done();
-                });
-            });
-        });  
-           
     });
+  
 });
 
 function generateRandomName() {
