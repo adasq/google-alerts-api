@@ -35,7 +35,7 @@ alerts.configure({
 });
 ```
 
-#### IMPORTANT: Due to the latest changes in Google, authentication (with disabled JavaScript) requires Captcha form to be filled in. You will have to do it within command line. If you do not want to fill it each time, generate cookies and reuse it later on ([see how to get cookies](#generate-cookies)) 
+#### IMPORTANT: Due to the latest changes in Google, authentication with disabled JavaScript is permited. Still, you can generate cookies on your own and reuse it later on ([see how to get cookies](#generate-cookies)) 
 
 - using cookie, ([see how to get cookies](#generate-cookies))
 
@@ -173,27 +173,37 @@ alerts.sync((err) => {
 
 #### Generate cookies:
 
-You can authenticate once, and then use cookies.
+You can authenticate once, and then use your cookies. Unfortunatelly it requires an additional action from you:
+
+1. Run "Dev Tools" tools and navigate "Network" tab (If you are in Chrome "Dev tools" make sure you have "Preserve log" option checked)
+2. Log in to Google
+3. Filter requests for "/signin/sl/challenge" pattern 
+4. In "Response" section search for "set-cookie: " entries. You will need 3 values: SID (71 characters), HSID, SSID (both 17 characters). Then you can use it to generate cookies, just run the function with your variables:
 
 ```js
-const fs = require('fs');
+const fs = require('fs')
+const alerts = require('google-alerts-api')
 
-alerts.generateCookies(MAIL, PASSWORD, (err, cookies) => {
-    if(err) return console.log(err);
-    fs.writeFileSync('cookies.data', cookies);
-});
+const SID = ''
+const HSID = ''
+const SSID = ''
+
+fs.writeFileSync('cookies.data', alerts.generateCookiesBySID(SID, HSID, SSID))
 ```
-and then:
+
+Then, put this output to "cookies" configuration:
+
 ```js
-const fs = require('fs');
+const fs = require('fs')
+const alerts = require('google-alerts-api')
 
 alerts.configure({
     cookies: fs.readFileSync('cookies.data').toString()
 });
 
 alerts.sync((err) => {
-    if(err) return console.log(err);
-    const alertList = alerts.getAlerts();
+    if(err) return console.log(err)
+    const alertList = alerts.getAlerts()
 });
 ```
 
@@ -201,7 +211,6 @@ alerts.sync((err) => {
 
 - https://accounts.google.com/b/1/DisplayUnlockCaptcha (make sure you are editing settings for proper user...)
 - https://myaccount.google.com/lesssecureapps
-- Generate cookies in the way described here: https://github.com/adasq/google-alerts-api/issues/17#issuecomment-453865203
 - still can't authenticate? Check out how does the HTTP login response looks like:
 
 ```js

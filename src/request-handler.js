@@ -140,11 +140,20 @@ function login({ mail = '', password = '', cookies }, cb) {
     });
 }
 
+const HEADERS = {
+    'accept': '*/*',
+    'accept-language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
+    'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    origin: 'https://www.google.com',
+    'referer': 'https://www.google.com/alerts'
+};
+
 function modify(requestX, form, cb) {
     const url = ALERTS_MODIFY_URL.replace('{requestX}', requestX);
     request({
         method: 'POST',
         url, jar,
+        headers: HEADERS,
         form: {
             params: JSON.stringify(form)
         }
@@ -156,6 +165,7 @@ function create(requestX, form, cb) {
     request({
         method: 'POST',
         url, jar,
+        headers: HEADERS,
         form: {
             params: JSON.stringify(form)
         }
@@ -167,6 +177,7 @@ function remove(requestX, id, cb) {
     request({
         method: 'POST',
         url, jar,
+        headers: HEADERS,
         form: {
             params: JSON.stringify([null, id])
         }

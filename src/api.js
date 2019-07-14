@@ -96,10 +96,12 @@ function modify(id, newData, cb) {
     const alert = alerts.findAlertById(id, state);
     if(!alert) return cb('no alert found');
 
-    const modifiedAlert = alerts.modifyData(alert, newData);
-    modifiedAlert.pop();
+    const createId = alerts.getCreateIdByState(state);
+ 
+    const modifiedAlert = alerts.modifyData(alert, newData, createId);
 
     const requestX = alerts.getRequestXByState(state);
+
     reqHandler.modify(requestX, modifiedAlert, (err, resp, body) => {
         cb(body);
     });
@@ -110,25 +112,36 @@ function create(createData, cb) {
     const createId = alerts.getCreateIdByState(state);
     
     const createParams = alerts.create(createData, createId);
+
     reqHandler.create(requestX, createParams, (err, resp, body) => {
         if(err) return cb(err);
         try {
             const parsedBody = JSON.parse(body);
-            let alert = parsedBody[4][0][3]; 
-            const id = alert[6][0][11];
-            const parsedAlert = alerts.parseAlertToData([null, id, alert]);
-            parsedAlert.rss = alerts.getRssFeedByCreateResponse(body);
-            cb(null, parsedAlert);
+            let alert = parsedBody[4][0]; 
+            const id = alert[2];
+            cb(null, { ...createData, id});
         }catch(e) {
             cb(e);
         }
     });
 }
 
+function generateCookiesBySID(SID, HSID, SSID) {
+    const str = JSON.stringify(
+        [
+            { key: 'SID', value: SID, domain: 'google.com' },
+            { key: 'HSID', value: HSID, domain: 'google.com' },
+            { key: 'SSID', value: SSID, domain: 'google.com' },
+        ]
+    );
+    return new Buffer(str).toString('base64');
+}
+
 module.exports = {
     HOW_OFTEN, DELIVER_TO, HOW_MANY, ERROR, SOURCE_TYPE,
     configure,
     generateCookies,
+    generateCookiesBySID,
     sync,
     getAlerts,
     create,
