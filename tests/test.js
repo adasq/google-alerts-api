@@ -29,6 +29,16 @@ describe('google', function () {
             });
         })
 
+        it('generates cookies by SSIDs', () => {
+            const SID = 'SID';
+            const HSID = 'HSID';
+            const SSID = 'SSID';
+
+            expect(
+                api.generateCookiesBySID(SID, HSID, SSID)
+            ).to.be('W3sia2V5IjoiU0lEIiwidmFsdWUiOiJTSUQiLCJkb21haW4iOiJnb29nbGUuY29tIn0seyJrZXkiOiJIU0lEIiwidmFsdWUiOiJIU0lEIiwiZG9tYWluIjoiZ29vZ2xlLmNvbSJ9LHsia2V5IjoiU1NJRCIsInZhbHVlIjoiU1NJRCIsImRvbWFpbiI6Imdvb2dsZS5jb20ifV0=')
+        })
+
         it('creates RSS', (done) => {
             api.sync(() => {
                 const alertToCreate = {

@@ -132,10 +132,22 @@ function create(createData, cb) {
     });
 }
 
+function generateCookiesBySID(SID, HSID, SSID) {
+    const str = JSON.stringify(
+        [
+            { key: 'SID', value: SID, domain: 'google.com' },
+            { key: 'HSID', value: HSID, domain: 'google.com' },
+            { key: 'SSID', value: SSID, domain: 'google.com' },
+        ]
+    );
+    return new Buffer(str).toString('base64');
+}
+
 module.exports = {
     HOW_OFTEN, DELIVER_TO, HOW_MANY, ERROR, SOURCE_TYPE,
     configure,
     generateCookies,
+    generateCookiesBySID,
     sync,
     getAlerts,
     create,
