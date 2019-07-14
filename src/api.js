@@ -111,7 +111,7 @@ function create(createData, cb) {
     const requestX = alerts.getRequestXByState(state);
     const createId = alerts.getCreateIdByState(state);
     
-    const createParams = alerts.create2(createData, createId);
+    const createParams = alerts.create(createData, createId);
 
     reqHandler.create(requestX, createParams, (err, resp, body) => {
         if(err) return cb(err);

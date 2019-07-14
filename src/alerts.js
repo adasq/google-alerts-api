@@ -141,7 +141,7 @@ function getRssFeedByCreateResponse(body) {
         return alertD;
     }
 
-    function create(data, createId, rssId) {
+    function modify(data, createId, rssId) {
         let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
         sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
         const n = null;
@@ -175,7 +175,7 @@ function getRssFeedByCreateResponse(body) {
         return result;
     }
 
-    function create2(data, createId, rssId) {
+    function create(data, createId, rssId) {
         let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
         sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
         const n = null;
@@ -265,14 +265,14 @@ function modifyData(alert, newData, createId) {
     const rssId = np.get(alert, RSS_ID_LOC);
 
     const newAlert = { ...parseAlertToData(alert), ...newData };
-    const request = create(newAlert, createId, rssId)
+    const request = modify(newAlert, createId, rssId)
 
     return request;
 }
 
 module.exports = {
     HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE,
-    findAlertById, modifyData, create2,
+    findAlertById, modifyData, create,
     getCreateIdByState, getAlertsByState, getRequestXByState,
     getStateByBody, create, parseAlertToData, printAlertData,
     isLoggedInByState, getRssFeedByCreateResponse
