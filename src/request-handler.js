@@ -149,7 +149,7 @@ const HEADERS = {
 };
 
 function modify(requestX, form, cb) {
-    const url = ALERTS_MODIFY_URL.replace('{requestX}', requestX.replace(':', '%3A'));
+    const url = ALERTS_MODIFY_URL.replace('{requestX}', requestX);
     request({
         method: 'POST',
         url, jar,
@@ -161,7 +161,7 @@ function modify(requestX, form, cb) {
 }
 
 function create(requestX, form, cb) {
-    const url = ALERTS_CREATE_URL.replace('{requestX}', requestX.replace(':', '%3A'));
+    const url = ALERTS_CREATE_URL.replace('{requestX}', requestX);
     request({
         method: 'POST',
         url, jar,
@@ -173,7 +173,7 @@ function create(requestX, form, cb) {
 }
 
 function remove(requestX, id, cb) {
-    const url = ALERTS_DELETE_URL.replace('{requestX}', requestX.replace(':', '%3A'));
+    const url = ALERTS_DELETE_URL.replace('{requestX}', requestX);
     request({
         method: 'POST',
         url, jar,
