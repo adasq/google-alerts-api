@@ -35,7 +35,7 @@ alerts.configure({
 });
 ```
 
-#### IMPORTANT: Due to the latest changes in Google, authentication with disabled JavaScript is permited.But still, you can generate cookies and reuse it later on ([see how to get cookies](#generate-cookies)) 
+#### IMPORTANT: Due to the latest changes in Google, authentication with disabled JavaScript is permited. Still, you can generate cookies on your own and reuse it later on ([see how to get cookies](#generate-cookies)) 
 
 - using cookie, ([see how to get cookies](#generate-cookies))
 
