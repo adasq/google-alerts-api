@@ -143,14 +143,9 @@ function login({ mail = '', password = '', cookies }, cb) {
 const HEADERS = {
     'accept': '*/*',
     'accept-language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
-    'cache-control': 'no-cache',
     'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    dnt: 1,
     origin: 'https://www.google.com',
-    pragma: 'no-cache',
-    'referer': 'https://www.google.com/alerts',
-    'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
+    'referer': 'https://www.google.com/alerts'
 };
 
 function modify(requestX, form, cb) {
