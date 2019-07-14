@@ -18,7 +18,8 @@
   "dependencies": {
     "nested-property": "0.0.7",
     "request": "2.88.0",
-    "cheerio": "0.22.0"
+    "cheerio": "0.22.0",
+    "lodash.merge": "4.6.2"
   },
   "devDependencies": {
     "expect.js": "0.3.1",
