@@ -142,7 +142,7 @@ function getRssFeedByCreateResponse(body) {
     }
 
     function create(data, createId, rssId) {
-        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData, rss} = data;
+        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
         sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
         const n = null;
         const getHowOftenPadding = (howOften) => {
@@ -176,7 +176,7 @@ function getRssFeedByCreateResponse(body) {
     }
 
     function create2(data, createId, rssId) {
-        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData, rss} = data;
+        let {howOften, sources, lang, name, region, howMany, deliverTo, deliverToData} = data;
         sources = JSON.parse(sources || SOURCE_TYPE.AUTOMATIC);
         const n = null;
         const getHowOftenPadding = (howOften) => {
@@ -266,19 +266,6 @@ function modifyData(alert, newData, createId) {
 
     const newAlert = { ...parseAlertToData(alert), ...newData };
     const request = create(newAlert, createId, rssId)
-    // Object.keys(newData).forEach(paramType => {
-    //     const paramValue = newData[paramType];
-    //     if(paramType === 'sources') {
-    //         const parsed = JSON.parse(paramValue)
-    //         np.set(alertCopy, '1.6', parsed[0]);
-    //         np.set(alertCopy, '1.7', parsed[1]);
-    //         np.set(alertCopy, '1.8', parsed[2]);
-    //     } else {
-    //         const propertyLoc = dataTypeToPropertyLocMap(paramType);
-    //         np.set(alertCopy, propertyLoc, paramValue);
-    //     }
-        
-    // });
 
     return request;
 }

@@ -142,7 +142,6 @@ function login({ mail = '', password = '', cookies }, cb) {
 
 const HEADERS = {
     'accept': '*/*',
-    // 'accept-encoding': 'gzip, deflate, br',
     'accept-language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7',
     'cache-control': 'no-cache',
     'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',

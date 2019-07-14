@@ -101,7 +101,6 @@ function modify(id, newData, cb) {
     const modifiedAlert = alerts.modifyData(alert, newData, createId);
 
     const requestX = alerts.getRequestXByState(state);
-    // require('fs').writeFileSync('state.json', JSON.stringify(modifiedAlert, null, '\t'))
 
     reqHandler.modify(requestX, modifiedAlert, (err, resp, body) => {
         cb(body);
@@ -114,17 +113,12 @@ function create(createData, cb) {
     
     const createParams = alerts.create2(createData, createId);
 
-    // require('fs').writeFileSync('state.json', JSON.stringify(createParams, null, '\t'))
-
     reqHandler.create(requestX, createParams, (err, resp, body) => {
         if(err) return cb(err);
         try {
             const parsedBody = JSON.parse(body);
-            // require('fs').writeFileSync('createresp.json', JSON.stringify(parsedBody, null, '\t'))
             let alert = parsedBody[4][0]; 
             const id = alert[2];
-            // const parsedAlert = alerts.parseAlertToData([null, id, alert]);
-            // parsedAlert.rss = alerts.getRssFeedByCreateResponse(body);
             cb(null, { ...createData, id});
         }catch(e) {
             cb(e);
