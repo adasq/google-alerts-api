@@ -118,7 +118,7 @@ function create(createData, cb) {
         try {
             const parsedBody = JSON.parse(body);
             let alert = parsedBody[4][0]; 
-            const id = alert[2];
+            const id = alert[1];
             cb(null, { ...createData, id});
         }catch(e) {
             cb(e);
