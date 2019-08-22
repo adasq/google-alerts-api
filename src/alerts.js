@@ -226,7 +226,7 @@ function toString(category, value) {
     }
 
     function getAlertsByState(state){
-        if (state[1] === null) {
+        if (state === null || state[0] === null || state[1] === null) {
             return [];
         }
         return state[0][0];
