@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/adasq/google-alerts-api.svg?branch=master)](https://travis-ci.org/adasq/google-alerts-api)
+
+[![Actions Status](https://github.com/adasq/google-alerts-api/workflows/Node%20CI/badge.svg)](https://github.com/adasq/google-alerts-api/actions)
 [![NPM Downloads](https://img.shields.io/npm/dm/google-alerts-api.svg?style=flat)](https://www.npmjs.org/package/google-alerts-api)
 [![NPM Downloads](https://img.shields.io/npm/dt/google-alerts-api.svg?style=flat)](https://www.npmjs.org/package/google-alerts-api)
 
