@@ -3,6 +3,7 @@ name: Node CI
 on:
   push: {}
   pull_request: {}
+  repository_dispatch: {}
   schedule:
   - cron: 0 2 * * 1-5
 
