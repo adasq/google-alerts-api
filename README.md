@@ -25,19 +25,7 @@ const alerts = require('google-alerts-api');
 
 ## Configuration
 
-Fetching alerts forces us to authenticate. Pass your credentials using `configure` method:
-
-- using mail/password
-```js
-alerts.configure({
-    mail: 'your_mail@gmail.com',
-    password: '**********'
-});
-```
-
 #### IMPORTANT: Due to the latest changes in Google, authentication with disabled JavaScript is permited. Still, you can generate cookies on your own and reuse it later on ([see how to get cookies](#generate-cookies)) 
-
-- using cookie, ([see how to get cookies](#generate-cookies))
 
 ```js
 alerts.configure({
@@ -175,23 +163,52 @@ alerts.sync((err) => {
 
 You can authenticate once, and then use your cookies. Unfortunatelly it requires an additional action from you:
 
-1. Run "Dev Tools" tools and navigate "Network" tab (If you are in Chrome "Dev tools" make sure you have "Preserve log" option checked)
-2. Log in to Google
-3. Filter requests for "/signin/sl/challenge" pattern 
-4. In "Response" section search for "set-cookie: " entries. You will need 3 values: SID (71 characters), HSID, SSID (both 17 characters). Then you can use it to generate cookies, just run the function with your variables:
+##### STEP 1: Authenticate in browser
+
+1. Open **Chrome Browser** in **Incognito** mode
+2. Navigate myaccount.google.com
+3. **Log into** your account
+
+##### STEP 2: Find your SID, HSID, SSID cookie values
+
+1. Open Chrome Dev Tools
+2. Navigate **Application** tab, select **Cookies** preview for http://myaccount.google.com domain
+3. Copy **SID**, **HSID** and **SSID** cookie values
+
+![copy SID, HSID, SSID cookie values](https://cdn.steemitimages.com/DQmbMvsdTvVpwukxMSXss57wq28gxXmLUNqkEgzYREHcLtZ/image.png) 
+
+
+##### STEP 3: Prepare your auth cookie string
+
+1. Put your SID, HSID, SSID values into value field of the code:
 
 ```js
-const fs = require('fs')
-const alerts = require('google-alerts-api')
-
-const SID = ''
-const HSID = ''
-const SSID = ''
-
-fs.writeFileSync('cookies.data', alerts.generateCookiesBySID(SID, HSID, SSID))
+window.btoa(JSON.stringify(
+    [{
+            key: 'SID',
+            value: '',
+            domain: 'google.com'
+        },
+        {
+            key: 'HSID',
+            value: '',
+            domain: 'google.com'
+        },
+        {
+            key: 'SSID',
+            value: '',
+            domain: 'google.com'
+        },
+    ]
+));
 ```
 
-Then, put this output to "cookies" configuration:
+2. Run this code in **Console** tab
+3. The output is your **auth cookie string**
+
+![enter image description here](https://cdn.steemitimages.com/DQmTifruHFrXeabrXpgwymYmCJBxCUuasUHvjVaTjNsKh5o/image.png)
+
+4. Put **auth cookie string** configuration:
 
 ```js
 const fs = require('fs')
