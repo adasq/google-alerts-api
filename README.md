@@ -227,8 +227,9 @@ alerts.sync((err) => {
 
 - https://accounts.google.com/b/1/DisplayUnlockCaptcha (make sure you are editing settings for proper user...)
 - https://myaccount.google.com/lesssecureapps
-- review repo Issues section
+- review [auth issues] labeled issues, hope you will find an answer
     
 
+[auth issues]: <https://github.com/adasq/google-alerts-api/issues?q=label%3Aauth-issues+>
 [tests]: <https://github.com/adasq/google-alerts-api/blob/master/tests/test.js>
 [how to get cookies]: <https://github.com/adasq/google-alerts-api#generate-cookies>
