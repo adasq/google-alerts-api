@@ -159,17 +159,17 @@ alerts.sync((err) => {
 });
 ```
 
-#### Generate cookies:
+### Generate cookies:
 
 You can authenticate once, and then use your cookies. Unfortunatelly it requires an additional action from you:
 
-##### STEP 1: Authenticate in browser
+#### STEP 1: Authenticate in browser
 
 1. Open **Chrome Browser** in **Incognito** mode
-2. Navigate myaccount.google.com
+2. Navigate http://myaccount.google.com
 3. **Log into** your account
 
-##### STEP 2: Find your SID, HSID, SSID cookie values
+#### STEP 2: Find your SID, HSID, SSID cookie values
 
 1. Open Chrome Dev Tools
 2. Navigate **Application** tab, select **Cookies** preview for http://myaccount.google.com domain
@@ -178,7 +178,7 @@ You can authenticate once, and then use your cookies. Unfortunatelly it requires
 ![copy SID, HSID, SSID cookie values](https://cdn.steemitimages.com/DQmbMvsdTvVpwukxMSXss57wq28gxXmLUNqkEgzYREHcLtZ/image.png) 
 
 
-##### STEP 3: Prepare your auth cookie string
+#### STEP 3: Prepare your auth cookie string
 
 1. Put your SID, HSID, SSID values into value field of the code:
 
