@@ -42,8 +42,7 @@ const alerts = require('google-alerts-api');
 const { HOW_OFTEN, DELIVER_TO, HOW_MANY, SOURCE_TYPE } = alerts;
 
 alerts.configure({
-    mail: 'your_mail@gmail.com',
-    password: '**********'
+    cookies: 'W3sia2V5IjoiR0FQUyIsInZhbHVlIjoiMTpCRXRtZEpjc...saGRasC==',
 });
 
 alerts.sync((err) => {
@@ -215,7 +214,7 @@ const fs = require('fs')
 const alerts = require('google-alerts-api')
 
 alerts.configure({
-    cookies: fs.readFileSync('cookies.data').toString()
+    cookies: "your 'auth cookie string' goes here..."
 });
 
 alerts.sync((err) => {
@@ -232,8 +231,7 @@ alerts.sync((err) => {
 
 ```js
 api.reqHandler.login({
-    mail: MAIL,
-    password: PASSWORD
+    cookie: '...'
 }, (err, debug) => {
     console.log(debug.statusCode); 
     // For success, you should see here '302'.
