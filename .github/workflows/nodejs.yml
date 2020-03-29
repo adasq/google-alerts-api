@@ -29,3 +29,4 @@ jobs:
         npm test
       env:
         cookies: ${{ secrets.cookies }}
+        mail: ${{ secrets.mail }}
