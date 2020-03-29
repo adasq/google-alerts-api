@@ -1,5 +1,4 @@
 {
-    "mail": "your-mail@google.com",
-    "password": "*********",
-    "cookies": ""
+    "mail": "justForUnitTests@gmail.com",
+    "cookies": "your auth cookie string"
 }

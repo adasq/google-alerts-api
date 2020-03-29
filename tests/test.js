@@ -13,7 +13,7 @@ nconf.argv()
     .env()
     .file({ file: './config.json' });
 
-const MAIL = 'ffmpeg3@gmail.com';
+const MAIL = nconf.get('mail');
 const COOKIES = nconf.get('cookies');
 
 const NAME = generateRandomName();
@@ -131,7 +131,7 @@ describe('google', function () {
             { howMany: HOW_MANY.ALL },
 
             { deliverTo: DELIVER_TO.RSS, deliverToData: '' },
-            { deliverTo: DELIVER_TO.MAIL, deliverToData: 'ffmpeg3@gmail.com' }
+            { deliverTo: DELIVER_TO.MAIL, deliverToData: MAIL }
         ]).it(params => `modifing: ${JSON.stringify(params)}`, (modifiedData, done) => {
             api.sync((err) => {
                 expect(err).to.be(null);
@@ -173,66 +173,3 @@ function generateRandomName() {
 function findAlertByName(alerts, alertName) {
     return alerts.find(alert => alert.name === alertName) || null;
 }
-
-/*
-        xdescribe('generateCookies', function() {
-    this.timeout(TIMEOUT_MS);
-    it('generateCookies', done => {
-        api.generateCookies(MAIL, PASSWORD, (err, cookies) => {
-            if(err) return console.log(err);
-            fs.writeFileSync('cookies.data', cookies);
-            done()
-        });
-    })
-})
-
-xdescribe('username / password login', function() {
-    this.timeout(TIMEOUT_MS);
-    it('username / password login', done => {
-        api.configure({
-            mail: MAIL,
-            password: PASSWORD
-        });
-        api.sync((err) => {
-            expect(err).to.be(null);
-            done();
-        });
-    })
-})
-        xit('throws for incorrect configuration', (done) => {
-            api.configure({
-                mail: undefined
-            });
-            api.sync((err) => {
-                expect(err).to.be('no mail/pass specified');
-                done();
-            });
-        });
-        xit('throws for invalid configuration', (done) => {
-            api.configure({
-                mail: MAIL,
-                password: `incorrect${PASSWORD}`
-            });
-            api.sync((err) => {
-                expect(err).to.be('authentication issue');
-                done();
-            });
-        });
-        xit('generates cookie', (done) => {
-            api.generateCookies(MAIL, PASSWORD, (err, cookies) => {
-                expect(err).to.be(null);
-                console.log(cookies);
-                done();
-            });
-        });
-       xit('does not throw for valid mail/pswd configuration', (done) => {
-            api.configure({
-                mail: MAIL,
-                password: PASSWORD
-            });
-            api.sync((err) => {
-                expect(err).to.be(null);
-                done();
-            });
-        });
-        */
