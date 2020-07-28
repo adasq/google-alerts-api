@@ -55,6 +55,7 @@ describe('google', function () {
                 api.create(alertToCreate, (err, alert) => {
                     expect(err).to.be(null);
                     expect(alert.name).to.be(alertToCreate.name);
+                    expect(alert).to.have.property('rss');
                     done();
                 });
             });
