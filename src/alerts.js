@@ -41,6 +41,7 @@ const HOW_OFTEN_LOC = '2.6.0.4';
 const RSS_ID_LOC = '1.5.0.10';
 const LANG_LOC = '1.2.2.0';
 const REGION_LOC = '1.2.2.1';
+const IS_REGION_SPECIFIED_LOC = '1.2.6';
 const HOW_MANY_LOC = '1.4';
 const DELIVER_TO_LOC = '1.5.0.0';
 const DELIVER_TO_DATA_LOC = '1.5.0.1';
@@ -123,7 +124,10 @@ function getRssFeedByCreateResponse(body) {
             if(hoModel.length === 3) return HOW_OFTEN.AT_MOST_ONCE_A_WEEK;
         }
 
-        const name = np.get(alert, NAME_LOC)
+        function getRegion() {
+            const isRegionSpecified = np.get(alert, IS_REGION_SPECIFIED_LOC, false);
+            return isRegionSpecified ? np.get(alert, REGION_LOC) : 'any';
+        }
 
         const alertD = {
             name: np.get(alert, NAME_LOC),
@@ -131,7 +135,7 @@ function getRssFeedByCreateResponse(body) {
             howOften: getHowOften(alert),
             sources: JSON.stringify(getSources(alert)),
             lang: np.get(alert, LANG_LOC),            
-            region: np.get(alert, REGION_LOC),
+            region: getRegion(alert),
             howMany: np.get(alert, HOW_MANY_LOC),
             deliverTo: np.get(alert, DELIVER_TO_LOC),
             rss: getRss(alert),
@@ -154,12 +158,14 @@ function getRssFeedByCreateResponse(body) {
             }            
             return [];
         }
+
+        const isAnyRegion = !region || region === 'any';
    
         const result = [n, data.id ? data.id : undefined,
                     [
                         n,n,n,
                         [
-                            n, name, "com", [n, lang, region || 'US'], n, n, n, region ? 1 : 0, 1
+                            n, name, "com", [n, lang, isAnyRegion ? 'US' : region], n, n, n, isAnyRegion ? 0 : 1, 1
                         ],
                         n, howMany,
                         [
@@ -189,11 +195,13 @@ function getRssFeedByCreateResponse(body) {
             return [];
         }
    
+        const isAnyRegion = !region || region === 'any';
+
         const result = [n,
                     [
                         n,n,n,
                         [
-                            n, name, "com", [n, lang, region || 'US'], n, n, n, region ? 1 : 0, 1
+                            n, name, "com", [n, lang, isAnyRegion ? 'US' : region], n, n, n, isAnyRegion ? 0 : 1, 1
                         ],
                         n, howMany,
                         [

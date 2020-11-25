@@ -133,7 +133,7 @@ alerts.sync(() => {
 	sources: SOURCE_TYPE.AUTOMATIC, // default one
         lang: 'en',
         name: 'NodeJS AND "Chrome V8"',
-        region: 'PL', // or do not specify it at all, if you want "All Regions"
+        region: 'PL', // or "any", if you want "All Regions"
         howMany: HOW_MANY.BEST,
         deliverTo: DELIVER_TO.RSS,
         deliverToData: ''

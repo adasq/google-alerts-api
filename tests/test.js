@@ -61,6 +61,58 @@ describe('google', function () {
             });
         });
 
+        describe('creates with region', () => {
+            it('as "any"', (done) => {
+                api.sync(() => {
+                    const NEW_NAME = NAME + '(region:ANY)';
+                    const alertToCreate = {
+                        name: NEW_NAME,
+                        howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
+                        sources: SOURCE_TYPE.AUTOMATIC,
+                        lang: 'en',
+                        region: 'any',
+                        howMany: HOW_MANY.BEST,
+                        deliverTo: DELIVER_TO.RSS,
+                        deliverToData: '',
+                    };
+    
+                    api.create(alertToCreate, (err, alert) => {
+                        expect(err).to.be(null);
+                        api.sync(() => {
+                            const alert = findAlertByName(api.getAlerts(), NEW_NAME);
+                            expect(alert.region).to.be('any');
+                            done();
+                        });
+                    });
+                });
+            });
+
+            it('as not specified', (done) => {
+                api.sync(() => {
+                    const NEW_NAME = NAME + '(region:undefined)';
+                    const alertToCreate = {
+                        name: NEW_NAME,
+                        howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
+                        sources: SOURCE_TYPE.AUTOMATIC,
+                        lang: 'en',
+                        howMany: HOW_MANY.BEST,
+                        deliverTo: DELIVER_TO.RSS,
+                        deliverToData: '',
+                    };
+    
+                    api.create(alertToCreate, (err) => {
+                        expect(err).to.be(null);
+                        api.sync(() => {
+                            const alert = findAlertByName(api.getAlerts(), NEW_NAME);
+                            expect(alert).to.eql({ ...alert, region: 'any' });
+                            done();
+                        });
+                       
+                    });
+                });
+            });
+        })
+        
         it('edit name for RSS', done => {
             api.sync((err) => {
                 expect(err).to.be(null);
@@ -98,14 +150,6 @@ describe('google', function () {
             });
         });
 
-        it('retrive mail alert', (done) => {
-            api.sync(() => {
-                const alert = findAlertByName(api.getAlerts(), NAME);
-                expect(alert.name).to.be(NAME);
-                done();
-            });
-        });
-
         forEach([
             { howOften: HOW_OFTEN.AS_IT_HAPPENS },
             { howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY },
@@ -127,6 +171,7 @@ describe('google', function () {
 
             { lang: 'pl' },
             { region: 'RU' },
+            { region: 'any' },
 
             { howMany: HOW_MANY.BEST },
             { howMany: HOW_MANY.ALL },
