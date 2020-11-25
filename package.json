@@ -1,6 +1,6 @@
 {
   "name": "google-alerts-api",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Google Alerts API",
   "main": "index.js",
   "scripts": {
