@@ -24,7 +24,7 @@ function generateCookies(mail, password, cb) {
         if(err) return cb(err);
         const cookies = getCookies();
         cb(null, cookies);
-    });    
+    });
 }
 
 function setCookies(cookies){
@@ -97,7 +97,7 @@ function modify(id, newData, cb) {
     if(!alert) return cb('no alert found');
 
     const createId = alerts.getCreateIdByState(state);
- 
+
     const modifiedAlert = alerts.modifyData(alert, newData, createId);
 
     const requestX = alerts.getRequestXByState(state);
@@ -110,16 +110,17 @@ function modify(id, newData, cb) {
 function create(createData, cb) {
     const requestX = alerts.getRequestXByState(state);
     const createId = alerts.getCreateIdByState(state);
-    
+
     const createParams = alerts.create(createData, createId);
 
     reqHandler.create(requestX, createParams, (err, resp, body) => {
         if(err) return cb(err);
         try {
             const parsedBody = JSON.parse(body);
-            let alert = parsedBody[4][0]; 
+            let alert = parsedBody[4][0];
             const id = alert[1];
-            cb(null, { ...createData, id});
+            const rss = alerts.getRssFeedByCreateResponse(body);
+            cb(null, { ...createData, id, rss});
         }catch(e) {
             cb(e);
         }
