@@ -15,7 +15,7 @@ const ERROR = {
 
 function getCookies() {
     const str = JSON.stringify(reqHandler.getCookies());
-    return new Buffer(str).toString('base64');
+    return Buffer.from(str).toString('base64');
 }
 
 function generateCookies(mail, password, cb) {
@@ -40,7 +40,7 @@ function configure({mail, password, cookies}) {
 }
 
 function parseCookies(cookies) {
-    const str = new Buffer(cookies, 'base64').toString('ascii');
+    const str = Buffer.from(cookies, 'base64').toString('ascii');
     return JSON.parse(str);
 }
 
@@ -135,7 +135,7 @@ function generateCookiesBySID(SID, HSID, SSID) {
             { key: 'SSID', value: SSID, domain: 'google.com' },
         ]
     );
-    return new Buffer(str).toString('base64');
+    return Buffer.from(str).toString('base64');
 }
 
 module.exports = {
