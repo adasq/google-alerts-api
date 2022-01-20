@@ -143,6 +143,7 @@ describe('google', function () {
                 };
 
                 api.create(alertToCreate, (err, alert) => {
+                    expect(err).to.be(null);
                     expect(alert.deliverTo).to.be(DELIVER_TO.MAIL);
                     expect(alert.deliverToData).to.be(MAIL);
                     done();
@@ -179,6 +180,7 @@ describe('google', function () {
             { deliverTo: DELIVER_TO.RSS, deliverToData: '' },
             { deliverTo: DELIVER_TO.MAIL, deliverToData: MAIL }
         ]).it(params => `modifing: ${JSON.stringify(params)}`, (modifiedData, done) => {
+            console.log(NAME);
             api.sync((err) => {
                 expect(err).to.be(null);
                 const alert = findAlertByName(api.getAlerts(), NAME);
