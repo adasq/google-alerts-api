@@ -61,6 +61,28 @@ describe('google', function () {
             });
         });
 
+        it('previews RSS', (done) => {
+            api.sync(() => {
+                const alertToPreview = {
+                    name: NAME,
+                    howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
+                    sources: SOURCE_TYPE.AUTOMATIC,
+                    lang: 'en',
+                    region: 'PL',
+                    howMany: HOW_MANY.BEST,
+                    deliverTo: DELIVER_TO.RSS,
+                    deliverToData: '',
+                };
+
+                api.preview(alertToPreview, (err, alert) => {
+                    expect(err).to.be(null);
+                    expect(alert.name).to.be(alertToPreview.name);
+                    expect(alert).to.have.property('preview');
+                    done();
+                });
+            });
+        });
+
         describe('creates with region', () => {
             it('as "any"', (done) => {
                 api.sync(() => {
@@ -75,7 +97,7 @@ describe('google', function () {
                         deliverTo: DELIVER_TO.RSS,
                         deliverToData: '',
                     };
-    
+
                     api.create(alertToCreate, (err, alert) => {
                         expect(err).to.be(null);
                         api.sync(() => {
@@ -99,7 +121,7 @@ describe('google', function () {
                         deliverTo: DELIVER_TO.RSS,
                         deliverToData: '',
                     };
-    
+
                     api.create(alertToCreate, (err) => {
                         expect(err).to.be(null);
                         api.sync(() => {
@@ -107,12 +129,12 @@ describe('google', function () {
                             expect(alert).to.eql({ ...alert, region: 'any' });
                             done();
                         });
-                       
+
                     });
                 });
             });
         })
-        
+
         it('edit name for RSS', done => {
             api.sync((err) => {
                 expect(err).to.be(null);

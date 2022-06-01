@@ -15,7 +15,7 @@ const ERROR = {
 
 function getCookies() {
     const str = JSON.stringify(reqHandler.getCookies());
-    return new Buffer(str).toString('base64');
+    return Buffer.from(str).toString('base64');
 }
 
 function generateCookies(mail, password, cb) {
@@ -40,7 +40,7 @@ function configure({mail, password, cookies}) {
 }
 
 function parseCookies(cookies) {
-    const str = new Buffer(cookies, 'base64').toString('ascii');
+    const str = Buffer.from(cookies, 'base64').toString('ascii');
     return JSON.parse(str);
 }
 
@@ -127,6 +127,19 @@ function create(createData, cb) {
     });
 }
 
+function preview(previewData, cb) {
+    const previewParams = alerts.create(previewData);
+
+    reqHandler.preview(previewParams, (err, resp, preview) => {
+        if (err) return cb(err);
+        try {
+            cb(null, { ...previewData, preview});
+        } catch (e) {
+            cb(e);
+        }
+    });
+}
+
 function generateCookiesBySID(SID, HSID, SSID) {
     const str = JSON.stringify(
         [
@@ -135,7 +148,7 @@ function generateCookiesBySID(SID, HSID, SSID) {
             { key: 'SSID', value: SSID, domain: 'google.com' },
         ]
     );
-    return new Buffer(str).toString('base64');
+    return Buffer.from(str).toString('base64');
 }
 
 module.exports = {
@@ -145,6 +158,7 @@ module.exports = {
     generateCookiesBySID,
     sync,
     getAlerts,
+    preview,
     create,
     remove,
     modify,

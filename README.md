@@ -25,7 +25,7 @@ const alerts = require('google-alerts-api');
 
 ## Configuration
 
-#### IMPORTANT: Due to the latest changes in Google, authentication with disabled JavaScript is permited. Still, you can generate cookies on your own and reuse it later on ([see how to get cookies](#generate-cookies)) 
+#### IMPORTANT: Due to the latest changes in Google, authentication with disabled JavaScript is permited. Still, you can generate cookies on your own and reuse it later on ([see how to get cookies](#generate-cookies))
 
 ```js
 alerts.configure({
@@ -154,7 +154,30 @@ alerts.sync((err) => {
     	alerts.sync((err) => {
             const syncedAlertsList = alerts.getAlerts(); //alertToRemove does not exists here.
         });
-    });   
+    });
+});
+```
+
+#### Preview alert:
+
+Alert preview returns Google provided HTML preview without generating the alert.
+
+```js
+alerts.sync(() => {
+    const alertToPreview = {
+    	howOften: HOW_OFTEN.AT_MOST_ONCE_A_DAY,
+	sources: SOURCE_TYPE.AUTOMATIC, // default one
+        lang: 'en',
+        name: 'NodeJS AND "Chrome V8"',
+        region: 'PL', // or "any", if you want "All Regions"
+        howMany: HOW_MANY.BEST,
+        deliverTo: DELIVER_TO.RSS,
+        deliverToData: ''
+    };
+
+    alerts.preview(alertToPreview, (err, alert) => {
+        console.log(alert.preview); //HTML data
+    });
 });
 ```
 
@@ -174,7 +197,7 @@ You can authenticate once, and then use your cookies. Unfortunatelly it requires
 2. Navigate **Application** tab, select **Cookies** preview for http://myaccount.google.com domain
 3. Copy **SID**, **HSID** and **SSID** cookie values
 
-![copy SID, HSID, SSID cookie values](https://cdn.steemitimages.com/DQmbMvsdTvVpwukxMSXss57wq28gxXmLUNqkEgzYREHcLtZ/image.png) 
+![copy SID, HSID, SSID cookie values](https://cdn.steemitimages.com/DQmbMvsdTvVpwukxMSXss57wq28gxXmLUNqkEgzYREHcLtZ/image.png)
 
 
 #### STEP 3: Prepare your auth cookie string
@@ -228,7 +251,7 @@ alerts.sync((err) => {
 - https://accounts.google.com/b/1/DisplayUnlockCaptcha (make sure you are editing settings for proper user...)
 - https://myaccount.google.com/lesssecureapps
 - review [auth issues] labeled issues, hope you will find an answer
-    
+
 
 [auth issues]: <https://github.com/adasq/google-alerts-api/issues?q=label%3Aauth-issues+>
 [tests]: <https://github.com/adasq/google-alerts-api/blob/master/tests/test.js>

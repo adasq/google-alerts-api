@@ -11,6 +11,7 @@ const ALERTS_URL = 'https://www.google.com/alerts';
 const ALERTS_MODIFY_URL = 'https://www.google.com/alerts/modify?x={requestX}';
 const ALERTS_CREATE_URL = 'https://www.google.com/alerts/create?x={requestX}';
 const ALERTS_DELETE_URL = 'https://www.google.com/alerts/delete?x={requestX}';
+const ALERTS_PREVIEW_URL = 'https://www.google.com/alerts/preview?params={requestParams}';
 
 const COOKIES_URL = 'https://accounts.google.com';
 
@@ -160,6 +161,11 @@ function modify(requestX, form, cb) {
     }, cb);
 }
 
+function preview(requestParams, cb) {
+    const url = ALERTS_PREVIEW_URL.replace('{requestParams}', encodeURIComponent(JSON.stringify(requestParams)));
+    request(url, cb);
+}
+
 function create(requestX, form, cb) {
     const url = ALERTS_CREATE_URL.replace('{requestX}', requestX);
     request({
@@ -201,6 +207,7 @@ function checkRssSource(url, cb) {
 
 module.exports = {
     login,
+    preview,
     create,
     modify,
     delete: remove,
